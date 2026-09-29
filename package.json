@@ -1,0 +1,27 @@
+{
+  "name": "kunhee-ryu-research",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev --host 127.0.0.1",
+    "build": "astro check && astro build && node scripts/audit-public.mjs",
+    "preview": "astro preview --host 127.0.0.1",
+    "deploy": "npm run build && node scripts/publish-pages.mjs",
+    "test": "playwright test",
+    "cv": "node scripts/export-cv.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/dm-sans": "latest",
+    "astro": "7.3.5",
+    "three": "latest"
+  },
+  "devDependencies": {
+    "@astrojs/check": "latest",
+    "@axe-core/playwright": "latest",
+    "@playwright/test": "latest",
+    "@types/node": "^26.6.3",
+    "@types/three": "latest",
+    "typescript": "latest"
+  }
+}

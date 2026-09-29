@@ -1,0 +1,50 @@
+---
+import { story } from '../data/story';
+interface Props { stage: number; }
+const { stage } = Astro.props;
+const scene = story[stage];
+---
+<figure class="research-scene" data-scene={stage}>
+  <div class="scene-heading"><span class="scene-number">{scene.n}</span><h3>{scene.visualTitle}</h3></div>
+  <svg class="scene-svg" viewBox="0 0 560 370" role="img" aria-label={scene.visualAlt} fill="none">
+    {stage===0 ? <>
+      <rect class="scene-paper" x="43" y="77" width="164" height="205" rx="5"/>
+      <path class="scene-muted" d="M63 103H131M63 114H108"/>
+      <path class="scene-line" d="M67 140V235H184"/>
+      <path class="scene-grid" d="M67 170H184M67 203H184"/>
+      <path class="scene-line scene-draw" pathLength="1" d="M78 222L102 198L128 210L154 166L177 151"/>
+      {[[78,222],[102,198],[128,210],[154,166],[177,151]].map(([x,y])=><circle class="scene-dot" cx={x} cy={y} r="3.5"/>)}
+      <path class="scene-flow scene-draw" pathLength="1" d="M207 165H309"/><path class="scene-line" d="M299 160L309 165L299 170"/>
+      <rect class="scene-paper" x="309" y="99" width="208" height="166" rx="5"/>
+      <path class="scene-grid" d="M309 140H517M309 189H517"/>
+      <g class="scene-label"><text x="328" y="124">Evidence record</text><text x="328" y="166">Entity → observed value</text></g>
+      <g class="scene-small"><text x="328" y="216">Source reference</text><text x="328" y="239">Figure / document / page</text><text x="258" y="145" text-anchor="middle">Extract</text></g>
+      <path class="scene-return" d="M309 246H251V264H207"/><path class="scene-muted" d="M217 259L207 264L217 269"/>
+      <g class="scene-label" text-anchor="middle"><text x="125" y="317">Scientific source</text><text x="413" y="317">Traceable information</text></g>
+    </> : stage===1 ? <>
+      <g class="scene-line">{[104,184,264].map(y=><path d={`M123 ${y}H225`}/>)}<path class="scene-draw" pathLength="1" d="M267 104H292C330 104 330 184 362 184M267 184H362M267 264H292C330 264 330 184 362 184"/></g>
+      <path class="scene-return" d="M246 125V163M246 205V243"/>
+      {[104,184,264].map((y,i)=><g><rect x="61" y={y-25} width="62" height="50" rx="4" class="scene-paper"/><path class="scene-muted" d={`M73 ${y-9}H109M73 ${y}H109M73 ${y+9}H97`}/><circle cx="246" cy={y} r="21" class="scene-paper"/><text x="246" y={y+4} text-anchor="middle" class="scene-small">{String.fromCharCode(65+i)}</text></g>)}
+      <rect x="362" y="143" width="145" height="82" rx="5" class="scene-paper"/>
+      <path class="scene-line" d="m378 164 5 5 10-12M404 163H488M378 188H488M378 204H461"/>
+      <g class="scene-small"><text x="265" y="147">Critique</text><text x="435" y="251" text-anchor="middle">Sources stay attached</text></g>
+      <g class="scene-label" text-anchor="middle"><text x="92" y="317">Studies</text><text x="246" y="317">Study agents</text><text x="435" y="317">Reviewable evidence</text></g>
+    </> : <>
+      <g class:list={['scene-branches',{'scene-prediction':stage===3}]}>
+        <path class="scene-line" d="M131 185C182 185 197 109 253 109H463"/>
+        <path class="scene-muted" d="M131 185C182 185 197 258 253 258H423"/>
+      </g>
+      {stage===2 ? <path class="scene-flow scene-draw" pathLength="1" d="M131 185C182 185 197 258 253 258H423"/> : <path class="scene-flow scene-draw" pathLength="1" d="M131 185C182 185 197 109 253 109H312"/>}
+      <rect x="51" y="147" width="80" height="76" rx="5" class="scene-paper"/>
+      {[0,1].map(row=>[0,1].map(col=><rect x={68+col*25} y={163+row*25} width="19" height="19" rx="2" class:list={['scene-tile',{'tile-filled':row===col}]}/>))}
+      <circle cx="312" cy="109" r="20" class="scene-paper"/><circle cx="312" cy="258" r="20" class="scene-paper"/>
+      <text x="312" y="114" text-anchor="middle" class="scene-state">s₁</text><text x="312" y="263" text-anchor="middle" class="scene-state">s₂</text>
+      <circle cx="477" cy="109" r="14" class="scene-paper"/><circle cx="477" cy="109" r="5" class="scene-dot"/>
+      <circle cx="435" cy="258" r="12" class="scene-paper"/><path class="scene-line" d="m431 254 8 8m0-8-8 8"/>
+      <g class="scene-label"><text x="91" y="250" text-anchor="middle">Artifact</text><text x="477" y="77" text-anchor="middle">Goal</text><text x="421" y="294" text-anchor="middle">No completion</text></g>
+      <g class="scene-small" text-anchor="middle"><text x="220" y="83">{stage===2?'Valid edit':'Possible edit'}</text><text x="221" y="291">{stage===2?'Also valid':'Possible edit'}</text></g>
+      {stage===2 ? <text class="scene-label" x="353" y="338" text-anchor="middle">Has the goal become unreachable?</text> : <g><path class="scene-return" d="M93 328H123"/><text x="132" y="332" class="scene-small">Predicted future</text><path class="scene-line" d="M326 328H356"/><text x="365" y="332" class="scene-small">Action to test</text></g>}
+    </>}
+  </svg>
+  <figcaption><p>{scene.visualCaption}</p><span>{scene.source}</span></figcaption>
+</figure>

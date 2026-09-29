@@ -1,0 +1,90 @@
+---
+interface Props { kind: string; interactive?: boolean; }
+const { kind, interactive = false } = Astro.props;
+const descriptions: Record<string, string> = {
+  paths: 'Two locally valid edits: the upper branch retains a route to the goal, while the lower branch reaches a dead end.',
+  learning: 'Conceptual learning signals: token likelihood changes during a plateau in exact match. Two markers compare the signals at the same checkpoint.',
+  agents: 'Three studies connect to assigned agents, which exchange critiques and send evidence through verification to a separate statistical pooling module.',
+  trust: 'Four connected stages in a verification loop: inspect evidence, interpret it, judge the answer, and revisit it.',
+  profiles: 'Four artificial agents with different illustrative moral priorities interact in a shared space and receive contribution feedback.',
+  norms: 'A shared institutional rule is applied to four interacting artificial agents. Their collective behavior is observed.',
+  axes: 'A conceptual scientific chart is converted to a pixel grid, where the horizontal and vertical axes are identified.',
+};
+---
+<div class:list={['diagram', `diagram-${kind}`, { 'is-interactive': interactive }]} data-diagram={kind}>
+  <svg viewBox="0 0 640 360" role="img" aria-label={descriptions[kind]} fill="none" xmlns="http://www.w3.org/2000/svg">
+    {kind === 'paths' ? <>
+      <g class="diagram-secondary" stroke-width="1.8"><path d="M90 176C152 176 157 104 226 104H548"/><path d="M90 176C152 176 157 250 226 250H494"/><path d="M226 104C298 104 310 178 388 178H482"/></g>
+      <path class="good-path" d="M90 176C152 176 157 104 226 104H548" stroke-width="3"/>
+      <path class="bad-path" d="M90 176C152 176 157 250 226 250H494" stroke-width="3" stroke-dasharray="6 5"/>
+      <g class="diagram-node" stroke-width="2">{[[226,104],[388,104],[226,250],[388,250],[388,178],[482,178]].map(([x,y])=><circle cx={x} cy={y} r="6"/>)}</g>
+      <circle cx="90" cy="176" r="9" class="diagram-solid"/><circle cx="548" cy="104" r="14" class="diagram-node" stroke-width="2"/><circle cx="548" cy="104" r="5" class="diagram-solid"/>
+      <circle cx="494" cy="250" r="12" class="diagram-node" stroke-width="1.8"/><path d="m490 246 8 8m0-8-8 8" stroke="currentColor" stroke-width="1.8"/>
+      <g class="svg-label"><text x="90" y="212" text-anchor="middle">Start</text><text x="548" y="70" text-anchor="middle">Goal</text><text x="306" y="75" text-anchor="middle">A route remains</text><text x="446" y="286" text-anchor="middle">No feasible completion</text></g>
+      <text x="320" y="333" text-anchor="middle" class="svg-caption">The next edit changes what remains possible.</text>
+    </> : kind === 'learning' ? <>
+      <rect x="72" y="77" width="246" height="191" class="diagram-region"/>
+      <path d="M72 79H568M72 141H568M72 204H568" class="diagram-grid"/><path d="M72 70V268H568" class="diagram-secondary" stroke-width="1.6"/>
+      <path class="soft-curve" d="M72 254C150 254 220 198 300 171S441 96 556 84" stroke="currentColor" stroke-width="2.6" stroke-dasharray="5 6"/>
+      <path d="M72 254H323C360 254 370 232 393 171S445 84 556 84" stroke="currentColor" stroke-width="3"/>
+      <path class="soft-curve diagram-secondary" d="M300 171V254" stroke-dasharray="3 5" stroke-width="1.5"/>
+      <circle cx="300" cy="171" r="5.5" class="soft-curve diagram-solid"/><circle cx="300" cy="254" r="5.5" class="diagram-solid"/>
+      <g class="svg-label"><text x="72" y="49">Learning signal</text><text x="556" y="298" text-anchor="end">Training →</text><text x="177" y="111" text-anchor="middle">Same exact-match score</text></g>
+      <g class="svg-caption"><path d="M110 329H140" stroke="currentColor" stroke-width="2.8"/><text x="150" y="333">Exact match</text><g class="soft-curve"><path d="M345 329H375" stroke="currentColor" stroke-width="2.4" stroke-dasharray="5 5"/><text x="385" y="333">Token likelihood</text></g></g>
+    </> : kind === 'agents' ? <>
+      <g stroke="currentColor" stroke-width="1.8">{[96,180,264].map(y=><path d={`M94 ${y}H217`}/>)}<path d="M263 96H309C365 96 353 180 408 180M263 180H408M263 264H309C365 264 353 180 408 180M462 180H538"/><path d="M240 119V157M240 203V241" stroke-dasharray="4 5"/></g>
+      {[96,180,264].map(y=><g><rect x="58" y={y-24} width="36" height="48" rx="3" class="diagram-node" stroke-width="1.8"/><path d={`M67 ${y-10}H85M67 ${y}H85M67 ${y+10}H79`} class="diagram-secondary" stroke-width="1.6"/><circle cx="240" cy={y} r="23" class="diagram-node" stroke-width="1.8"/><circle cx="240" cy={y} r="5" class="diagram-solid"/></g>)}
+      <rect x="408" y="153" width="54" height="54" rx="5" class="diagram-node" stroke-width="2"/><path d="m423 180 8 8 16-17" stroke="currentColor" stroke-width="2.2"/>
+      <circle cx="560" cy="180" r="22" class="diagram-node" stroke-width="2"/><path d="M552 168H569L559 180L569 192H552" stroke="currentColor" stroke-width="1.8"/>
+      <g class="svg-label" text-anchor="middle"><text x="76" y="324">Studies</text><text x="240" y="324">Study agents</text><text x="435" y="324">Verify</text><text x="560" y="324">Pool</text></g><text x="270" y="140" class="svg-caption">Critique</text>
+    </> : kind === 'trust' ? <>
+      <g stroke="currentColor" stroke-width="1.8"><path d="M344 79C427 79 487 102 487 150M487 198C487 246 427 269 344 269M296 269C213 269 153 246 153 198M153 150C153 102 213 79 296 79"/><path d="M482 141L487 150L492 141M353 264L344 269L353 274M148 207L153 198L158 207M287 74L296 79L287 84"/></g>
+      {[{x:320,y:79,n:'01'},{x:487,y:174,n:'02'},{x:320,y:269,n:'03'},{x:153,y:174,n:'04'}].map(n=><g><circle cx={n.x} cy={n.y} r="24" class="diagram-node" stroke-width="2"/><text x={n.x} y={n.y+4} text-anchor="middle" class="svg-label">{n.n}</text></g>)}
+      <g class="svg-label"><text x="320" y="37" text-anchor="middle">Inspect evidence</text><text x="524" y="179">Interpret</text><text x="320" y="314" text-anchor="middle">Judge</text><text x="116" y="179" text-anchor="end">Revisit</text></g>
+      <text x="320" y="171" text-anchor="middle" class="svg-title">Trust is a process.</text><text x="320" y="195" text-anchor="middle" class="svg-caption">Check. Interpret. Reconsider.</text>
+    </> : kind === 'profiles' ? <>
+      <path d="M203 92H437V260H203Z" class="diagram-secondary" stroke-width="1.5" stroke-dasharray="4 6"/>
+      <path d="M203 92L280 149M437 92L360 149M203 260L280 203M437 260L360 203" stroke="currentColor" stroke-width="1.8"/>
+      <rect x="280" y="140" width="80" height="72" rx="5" class="diagram-node" stroke-width="1.8"/><path d="M299 181v-16l21-13 21 13v27h-42v-11m16 11v-16h10v16" stroke="currentColor" stroke-width="1.6"/>
+      {[[203,92],[437,92],[203,260],[437,260]].map(([x,y],i)=><g><circle cx={x} cy={y} r="23" class="diagram-node" stroke-width="1.8"/>{[0,1,2].map(j=><path d={`M${x-9+j*9} ${y+8}v-${[[11,20,14],[19,12,8],[9,17,21],[16,10,18]][i][j]}`} stroke="currentColor" stroke-width="3"/>)}</g>)}
+      <g class="svg-label" text-anchor="middle"><text x="203" y="47">Agent A</text><text x="437" y="47">Agent B</text><text x="203" y="305">Agent C</text><text x="437" y="305">Agent D</text></g>
+      <text x="320" y="235" text-anchor="middle" class="svg-caption">Shared space</text><text x="320" y="340" text-anchor="middle" class="svg-caption">Illustrative priorities · Repeated interaction</text>
+    </> : kind === 'norms' ? <>
+      <rect x="72" y="81" width="126" height="164" rx="5" class="diagram-node" stroke-width="1.8"/>
+      <g stroke="currentColor" stroke-width="1.8">{[120,163,206].map((y,i)=><g><rect x="90" y={y-6} width="12" height="12" rx="2"/><path d={`M115 ${y}H177`}/>{i!==1&&<path d={`m92 ${y} 4 3 5-6`}/>}</g>)}</g>
+      <path d="M198 163H276M426 163H503" stroke="currentColor" stroke-width="2"/><path d="M267 158L276 163L267 168M494 158L503 163L494 168" stroke="currentColor" stroke-width="1.8"/>
+      <rect x="276" y="88" width="150" height="150" rx="9" class="diagram-region" stroke="currentColor" stroke-width="1.8"/>
+      <path d="M313 125H389V201H313ZM313 125L389 201M389 125L313 201" class="diagram-secondary" stroke-width="1.5"/>
+      {[[313,125],[389,125],[313,201],[389,201]].map(([x,y])=><circle cx={x} cy={y} r="11" class="diagram-node" stroke-width="1.8"/>)}
+      <rect x="515" y="169" width="8" height="33" rx="1" class="diagram-solid"/><rect x="536" y="143" width="8" height="59" rx="1" class="diagram-solid"/><rect x="557" y="156" width="8" height="46" rx="1" class="diagram-solid"/><path d="M503 130V202H573" class="diagram-secondary" stroke-width="1.5"/>
+      <g class="svg-label" text-anchor="middle"><text x="135" y="283">Shared rules</text><text x="351" y="283">Agent society</text><text x="540" y="283">Outcomes</text></g><text x="320" y="330" text-anchor="middle" class="svg-caption">Vary the rules. Observe the interaction.</text>
+    </> : <>
+      <rect x="63" y="81" width="193" height="181" rx="4" class="diagram-node" stroke-width="1.5"/>
+      <path d="M91 106V236H233" stroke="currentColor" stroke-width="2"/><path d="M91 193H233M91 151H233M91 109H233" class="diagram-grid"/>
+      <path d="M105 218L134 176L163 189L192 135L222 117" stroke="currentColor" stroke-width="2"/>{[[105,218],[134,176],[163,189],[192,135],[222,117]].map(([x,y])=><circle cx={x} cy={y} r="3.5" class="diagram-solid"/>)}
+      <path d="M276 171H348m-9-5 9 5-9 5" stroke="currentColor" stroke-width="1.8"/>
+      <g>{Array.from({length:10},(_,row)=>Array.from({length:11},(_,col)=><rect x={380+col*16} y={91+row*16} width="13" height="13" rx="1" class:list={['pixel',{ 'pixel-axis': col===1||row===8 }]}/>))}</g>
+      <g class="svg-label" text-anchor="middle"><text x="160" y="300">Scientific chart</text><text x="466" y="300">Axes from pixels</text></g><text x="320" y="338" text-anchor="middle" class="svg-caption">Recover the structure before extracting the data.</text>
+    </>}
+  </svg>
+  {interactive && <div class="diagram-explanation">
+    {kind === 'paths' ? <><div class="diagram-controls" role="group" aria-label="Explore two illustrative edits"><button data-choice="good" aria-pressed="true">Preserve a path</button><button data-choice="bad" aria-pressed="false">Take the dead end</button></div><p class="diagram-feedback" aria-live="polite">This edit leaves a route to the goal. The state remains recoverable.</p><p class="figure-note">Conceptual illustration of recoverability. This graph is not experimental data.</p></> : kind === 'learning' ? <><div class="diagram-controls" role="group" aria-label="Learning curve layers"><button data-choice="both" aria-pressed="true">See both signals</button><button data-choice="hard" aria-pressed="false">Exact match only</button></div><p class="diagram-feedback" aria-live="polite">A continuous signal can distinguish checkpoints that share an exact-match score.</p><p class="figure-note">Conceptual curves with no numerical scale. Token likelihood is not a universal measure of understanding.</p></> : <p class="figure-note">{kind === 'agents' ? 'Conceptual workflow. Agents verify evidence; a separate module performs statistical pooling.' : kind === 'trust' ? 'Conceptual summary of the verification loop, based on the CHI EA 2026 paper.' : kind === 'axes' ? 'Conceptual illustration of axis detection. The chart and pixels are illustrative.' : 'Conceptual illustration of an artificial-agent simulation. This is not experimental data or a model of human populations.'}</p>}
+  </div>}
+</div>
+<script>
+  document.querySelectorAll<HTMLElement>('.is-interactive').forEach(diagram => {
+    diagram.querySelectorAll<HTMLButtonElement>('[data-choice]').forEach(button => {
+      button.addEventListener('click', () => {
+        diagram.dataset.selected = button.dataset.choice;
+        diagram.querySelectorAll('[data-choice]').forEach(other => other.setAttribute('aria-pressed', String(other === button)));
+        const feedback = diagram.querySelector('.diagram-feedback');
+        const choice = button.dataset.choice;
+        if (feedback) feedback.textContent = choice === 'bad'
+          ? 'This edit is locally admissible in the illustration, but no route to the goal remains. Recoverability is lost.'
+          : choice === 'good' ? 'This edit leaves a route to the goal. The state remains recoverable.'
+          : choice === 'hard' ? 'Exact match assigns the same score throughout the plateau. It cannot rank these checkpoints.'
+          : 'A continuous signal can distinguish checkpoints that share an exact-match score.';
+      });
+    });
+  });
+</script>

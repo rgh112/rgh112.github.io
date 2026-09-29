@@ -1,0 +1,29 @@
+---
+import { layouts, storyEdges } from '../data/story-geometry';
+import { story } from '../data/story';
+---
+<figure class="story-morph" data-story-morph>
+  <div class="morph-heading"><span data-morph-number>01</span><h3 data-morph-title>{story[0].visualTitle}</h3></div>
+  <svg class="morph-svg" viewBox="0 0 600 490" role="img" aria-label="Source measurements become connected evidence, then branching actions and predicted future paths. The same points and lines change continuously as you scroll.">
+    <g data-morph-sources class="morph-sources" fill="none">
+      {[0,1,2].map(i=><g><rect x="49" y={48+i*140} width="171" height="108" rx="5"/><path d={`M66 ${67+i*140}V${142+i*140}H201`}/></g>)}
+    </g>
+    <g data-morph-halos fill="none" opacity="0">
+      {[12,13,14].map(i=><circle data-halo={i} r="72"/>) }
+    </g>
+    <g class="morph-edges" fill="none">
+      {storyEdges.map((edge,i)=>{const a=layouts[0][edge.from].position,b=layouts[0][edge.to].position;return <path data-edge={i} data-from={edge.from} data-to={edge.to} d={`M${a}L${b}`} opacity={edge.weights[0]}/>;})}
+    </g>
+    <g class="morph-nodes">
+      {layouts[0].map((node,i)=><circle data-node={i} cx={node.position[0]} cy={node.position[1]} r={node.radius} opacity={node.opacity} class:list={{'morph-hub':i>=12}}/>)}
+    </g>
+    <circle class="morph-goal" data-morph-goal cx="529" cy="91" r="15" opacity="0" fill="none"/>
+    <g data-morph-stop opacity="0"><circle r="11" fill="white"/><path d="m-4-4 8 8m0-8-8 8" fill="none"/></g>
+    <g class="morph-labels" data-label-group="0"><text x="135" y="29" text-anchor="middle">Source measurements</text><text x="390" y="29" text-anchor="middle">Grounded evidence</text><text x="390" y="134" text-anchor="middle">Source A</text><text x="390" y="274" text-anchor="middle">Source B</text><text x="390" y="414" text-anchor="middle">Source C</text></g>
+    <g class="morph-labels" data-label-group="1" opacity="0"><text x="157" y="53" text-anchor="middle">Study agent A</text><text x="422" y="53" text-anchor="middle">Study agent B</text><text x="302" y="447" text-anchor="middle">Study agent C</text><text x="315" y="244">Checked evidence</text><text x="290" y="123" text-anchor="middle">Cross-check</text></g>
+    <g class="morph-labels" data-label-group="2" opacity="0"><text x="64" y="278" text-anchor="middle">Current state</text><text x="529" y="62" text-anchor="middle">Goal</text><text x="408" y="316">No completion</text><text x="273" y="103">A path remains</text></g>
+    <g class="morph-labels" data-label-group="3" opacity="0"><text x="64" y="278" text-anchor="middle">Current state</text><text x="533" y="43" text-anchor="middle">Goal</text><text x="474" y="217" text-anchor="middle">Predicted alternatives</text><text x="220" y="65">Anticipate the next edit</text><text x="427" y="452">Other possibilities</text></g>
+    <g class="morph-forecast-key" data-morph-key opacity="0"><path d="M193 472H224"/><text x="234" y="476">Predicted future · research direction</text></g>
+  </svg>
+  <figcaption><p data-morph-caption>{story[0].visualCaption}</p><span data-morph-source>{story[0].source}</span></figcaption>
+</figure>

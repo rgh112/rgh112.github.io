@@ -1,0 +1,50 @@
+---
+import type { PaperFigure } from '../data/paper-figures';
+interface Props { figure: PaperFigure }
+const {figure:f}=Astro.props;
+---
+<figure class="paper-source-figure" aria-labelledby={`${f.id}-title`}>
+  <header class="source-figure-heading"><div><span class="eyebrow">Inside the paper</span><h3 id={`${f.id}-title`}>{f.title}</h3></div><a class="figure-open" href={f.src} target="_blank" rel="noopener noreferrer" data-figure-open aria-label={`Enlarge figure: ${f.title}`}>Enlarge <span aria-hidden="true">↗</span></a></header>
+  <a class="source-figure-image" href={f.src} target="_blank" rel="noopener noreferrer" data-figure-open aria-label={`Open full-size figure: ${f.title}`}><img src={f.src} width={f.width} height={f.height} loading="lazy" decoding="async" alt={f.alt}/></a>
+  <figcaption>
+    <p class="source-figure-caption">{f.caption}</p>
+    <div class="figure-reading-guide">{f.guide.map(item=><div><h4>{item.label}</h4><p>{item.text}</p></div>)}</div>
+    <p class="figure-attribution">{f.attribution} {f.source && <a href={f.source} target="_blank" rel="noopener noreferrer">Paper ↗</a>} {f.license && <a href={f.license.href} target="_blank" rel="noopener noreferrer">{f.license.label} ↗</a>}</p>
+  </figcaption>
+  <dialog class="figure-viewer" aria-labelledby={`${f.id}-viewer-title`} style={`--figure-width: ${f.width}px`}>
+    <header class="viewer-toolbar"><h2 id={`${f.id}-viewer-title`}>{f.title}</h2><div><button type="button" data-figure-zoom aria-pressed="false">Zoom in</button><button type="button" data-figure-close aria-label="Close figure">Close <span aria-hidden="true">×</span></button></div></header>
+    <div class="viewer-canvas" tabindex="0" aria-label="Figure. Use Zoom in to inspect details, then scroll to move around."><img src={f.src} width={f.width} height={f.height} loading="lazy" alt={f.alt}/></div>
+    <p class="viewer-credit">{f.attribution} <a href={f.src} target="_blank" rel="noopener noreferrer">Open image ↗</a></p>
+  </dialog>
+</figure>
+<script>
+  document.querySelectorAll<HTMLElement>('.paper-source-figure').forEach(figure=>{
+    const dialog=figure.querySelector<HTMLDialogElement>('.figure-viewer')!;
+    const zoom=dialog.querySelector<HTMLButtonElement>('[data-figure-zoom]')!;
+    const canvas=dialog.querySelector<HTMLElement>('.viewer-canvas')!;
+    figure.querySelectorAll<HTMLAnchorElement>('[data-figure-open]').forEach(link=>link.addEventListener('click',event=>{
+      if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
+      event.preventDefault();dialog.classList.remove('is-zoomed');zoom.setAttribute('aria-pressed','false');zoom.textContent='Zoom in';dialog.showModal();
+    }));
+    dialog.querySelector('[data-figure-close]')!.addEventListener('click',()=>dialog.close());
+    dialog.addEventListener('click',event=>{if(event.target!==dialog)return;const box=dialog.getBoundingClientRect();if(event.clientX<box.left||event.clientX>box.right||event.clientY<box.top||event.clientY>box.bottom)dialog.close();});
+    zoom.addEventListener('click',()=>{
+      const expanded=dialog.classList.toggle('is-zoomed');zoom.setAttribute('aria-pressed',String(expanded));zoom.textContent=expanded?'Fit to screen':'Zoom in';canvas.scrollTo(0,0);
+    });
+  });
+</script>
+<style>
+  .paper-source-figure{margin-top:35px;padding:28px 0 0;border-block:1px solid var(--line);}
+  .source-figure-heading{display:flex;justify-content:space-between;align-items:center;gap:24px;margin-bottom:26px;}.source-figure-heading .eyebrow{font-size:10px;color:var(--muted);margin-bottom:9px;}
+  .source-figure-heading h3{font-size:23px;line-height:1.35;letter-spacing:-.025em;font-weight:580;}.figure-open{font-size:12px;font-weight:550;white-space:nowrap;padding:10px 0;display:flex;gap:12px;}
+  .figure-open:hover{text-decoration:underline;text-underline-offset:4px;}.source-figure-image{display:block;background:#fff;border:1px solid #e4e6df;padding:18px;cursor:zoom-in;}.source-figure-image img{width:100%;height:auto;}
+  figcaption{padding:21px 0 24px;}.source-figure-caption{font-size:13px;color:#4f554a;line-height:1.75;max-width:760px;}
+  .figure-reading-guide{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:24px;padding-top:23px;}.figure-reading-guide h4{font-size:12px;margin:0 0 7px;font-weight:650;line-height:1.6;}.figure-reading-guide p{font-size:12px;line-height:1.7;color:var(--muted);}
+  .figure-attribution{font-size:10px;line-height:1.8;margin-top:24px;color:#656b5f;}.figure-attribution a{margin-left:10px;text-decoration:underline;text-underline-offset:3px;white-space:nowrap;}
+  .figure-viewer{width:min(1400px,94vw);max-width:94vw;max-height:92svh;margin:auto;padding:0;border:1px solid #d9dcd5;background:#fff;color:var(--ink);box-shadow:0 20px 90px #0003;}.figure-viewer::backdrop{background:rgb(22 26 19 / .6);backdrop-filter:blur(5px);}
+  .viewer-toolbar{padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid var(--line);}.viewer-toolbar h2{font-size:17px;line-height:1.45;letter-spacing:-.015em;}.viewer-toolbar>div{display:flex;gap:8px;flex-shrink:0;}.viewer-toolbar button{font-size:12px;padding:10px 14px;border:1px solid var(--line);min-height:42px;}.viewer-toolbar button:hover{background:var(--wash);}.viewer-toolbar button span{margin-left:7px;}
+  .viewer-canvas{padding:24px;overflow:auto;overscroll-behavior:contain;max-height:calc(92svh - 156px);}.viewer-canvas img{display:block;width:auto;max-width:100%;height:auto;max-height:calc(92svh - 204px);object-fit:contain;margin:auto;}.is-zoomed .viewer-canvas img{width:var(--figure-width);max-width:none;max-height:none;}
+  .viewer-credit{padding:14px 24px;border-top:1px solid var(--line);font-size:10px;color:var(--muted);line-height:1.6;}.viewer-credit a{text-decoration:underline;margin-left:12px;white-space:nowrap;}
+  @media(max-width:760px){.paper-source-figure{padding-top:22px;margin-top:28px;}.source-figure-heading{gap:14px;align-items:flex-start;margin-bottom:20px;}.source-figure-heading h3{font-size:20px;}.figure-open{font-size:11px;gap:6px;}.source-figure-image{padding:8px;}.figure-reading-guide{grid-template-columns:1fr;gap:18px;}.source-figure-caption{font-size:12px;}.viewer-toolbar{padding:14px;align-items:flex-start;flex-direction:column;gap:12px;}.viewer-toolbar h2{font-size:15px;}.viewer-toolbar>div{width:100%;justify-content:flex-end;}.viewer-toolbar button{padding:8px 13px;}.viewer-canvas{padding:12px;max-height:calc(92svh - 220px);}.viewer-canvas img{max-height:calc(92svh - 244px);}.is-zoomed .viewer-canvas img{max-height:none;}.viewer-credit{padding:12px 14px;}}
+  @media print{.figure-open,.figure-viewer{display:none;}.paper-source-figure{break-inside:avoid;}}
+</style>

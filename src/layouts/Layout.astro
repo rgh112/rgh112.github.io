@@ -1,0 +1,48 @@
+---
+import '@fontsource-variable/dm-sans';
+import '../styles/global.css';
+import '../styles/visual.css';
+import { profile } from '../data/profile';
+interface Props { title?: string; description?: string; }
+const { title, description = 'Kunhee Ryu is a researcher at Yonsei University studying how AI learns, reasons, and acts—from representations and scientific exploration to multi-agent systems and human judgment.' } = Astro.props;
+const current = Astro.url.pathname;
+const canonical = Astro.site ? new URL(current, Astro.site).href : undefined;
+const nav = [['Research', '/research/'], ['Directions', '/directions/'], ['About', '/about/'], ['CV', '/cv/']];
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#ffffff" />
+    <meta property="og:title" content={title ? `${title} — Kunhee Ryu` : 'Kunhee Ryu — Learning, reasoning, acting'} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    {canonical && <meta property="og:url" content={canonical} />}
+    {canonical && <link rel="canonical" href={canonical} />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title ? `${title} — Kunhee Ryu` : 'Kunhee Ryu — Learning, reasoning, acting'}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header wrap">
+      <a class="brand" href="/" aria-label="Kunhee Ryu, home"><span class="brand-mark" aria-hidden="true">kr<span>•</span></span><span>Kunhee Ryu</span></a>
+      <nav aria-label="Main navigation">{nav.map(([label, href]) => <a href={href} aria-current={current.startsWith(href) ? 'page' : undefined}>{label}{label === 'CV' && <span aria-hidden="true"> ↗</span>}</a>)}</nav>
+    </header>
+    <main id="main"><slot /></main>
+    <footer class="site-footer wrap">
+      <div class="footer-bottom"><span>© 2026 Kunhee Ryu</span><div><a href={profile.links.scholar} target="_blank" rel="noopener noreferrer">Scholar ↗</a><a href={profile.links.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href={profile.links.orcid} target="_blank" rel="noopener noreferrer">ORCID ↗</a><a href={`mailto:${profile.email}`}>Email ↗</a></div><span>Yonsei University · Seoul</span></div>
+    </footer>
+    <script>
+      const observer = new IntersectionObserver(entries => {
+        for (const entry of entries) if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          observer.unobserve(entry.target);
+        }
+      }, { threshold: 0.08 });
+      document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+    </script>
+  </body>
+</html>

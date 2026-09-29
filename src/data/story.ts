@@ -1,0 +1,38 @@
+export const story = [
+  {
+    n: '01', label: 'Grounding', title: 'Start with the evidence.',
+    text: 'My early work asked how to recover information from scientific charts and connect biomedical answers to their sources. It led to a question that still guides me: what information does a system need to make a sound judgment?',
+    link: '/research/counting-pixels/', cta: 'Finding structure in information',
+    visualTitle: 'From a figure to usable evidence',
+    visualCaption: 'Extract the information and keep a link to where it came from.',
+    visualAlt: 'Information is extracted from a scientific chart into an evidence record. A return link preserves the connection to the original source.',
+    source: 'Chart extraction · Biomedical retrieval',
+  },
+  {
+    n: '02', label: 'Interaction', title: 'Let evidence meet judgment.',
+    text: 'Evidence has to be checked and interpreted. Through multi-agent meta-analysis and studies of clinician trust, I began examining how agents and people combine, question, and use what they know.',
+    link: '/research/autometa/', cta: 'From evidence to shared conclusions',
+    visualTitle: 'Make the evidence inspectable',
+    visualCaption: 'Agents cross-check sources. People need evidence they can inspect and interpret.',
+    visualAlt: 'Three study agents exchange critiques and combine source-linked evidence into a record that can be inspected. Verification keeps the sources visible.',
+    source: 'AutoMETA · Clinician trust',
+  },
+  {
+    n: '03', label: 'Action', title: 'Follow the consequences.',
+    text: 'Scientific exploration also involves acting: editing a composition or a sequence and observing what changes. My work asks whether those edits preserve a path to the goal—and whether our evaluation can see where that path is lost.',
+    link: '/research/beyond-local-validity/', cta: 'Explore patterns, edits, and possibilities',
+    visualTitle: 'A valid edit can close a path',
+    visualCaption: 'Both edits are allowed. Only one leaves a way to complete the task.',
+    visualAlt: 'An artifact has two locally valid edits. One resulting state retains a route to the goal. The other has no feasible completion within the remaining budget.',
+    source: 'Evaluating LLM Agents Beyond Local Edit Validity',
+  },
+  {
+    n: '04', label: 'Looking ahead', title: 'Learn to anticipate.',
+    text: 'I now want to connect these questions through representation learning and world models: learning relationships that transfer, anticipating the effects of actions, and knowing when more information is needed.',
+    link: '/directions/', cta: 'The questions I want to pursue',
+    visualTitle: 'Predict the consequence before acting',
+    visualCaption: 'Can a learned model anticipate which edit would preserve a route to the goal?',
+    visualAlt: 'A future research direction: predict the consequences of two possible edits before selecting an action. Dashed branches denote predictions to be tested.',
+    source: 'Research direction · Representation learning & planning',
+  },
+];

@@ -1,0 +1,96 @@
+---
+const stages = [
+  {en:'Cultivation', title:'Training the body. Cultivating inner power.', description:'Outer practice and inner cultivation accumulate. The next realm can still remain out of reach.'},
+  {en:'Insight', title:'The barrier comes into focus.', description:'Power may already be there. What is missing is the insight that makes a way through the barrier visible.'},
+  {en:'Breakthrough', title:'Beyond the barrier.', description:'Reaching a new realm made me think of grokking: a long period of learning before generalization becomes visible.'},
+];
+---
+<figure class="wuxia-practice" data-wuxia data-stage="0">
+  <div class="practice-heading"><span class="eyebrow">Cultivation & breakthrough</span><span class="practice-count" aria-hidden="true">01 / 03</span></div>
+  <svg viewBox="0 0 440 430" role="img" aria-label="A robed martial artist trains below a mountain ridge. Inner power gathers, insight opens a passage, and the same figure rises to the next realm." fill="none">
+    <g class="distant-ridges" stroke="currentColor" stroke-width="1">
+      <path d="M16 231 68 177 98 201 171 104 230 170 291 78 348 142 402 110 431 146"/>
+      <path d="m68 177 12 46 18-22m73-97 8 86 22-58m90-54-10 82 37-42"/>
+      <path d="M17 254c59-15 99-3 151-19m121-50c55-16 92-13 137-6"/>
+    </g>
+    <circle class="mountain-sun" cx="335" cy="80" r="29" stroke="currentColor"/>
+    <g class="higher-ground" stroke="currentColor" stroke-linejoin="round">
+      <path d="m233 252 50-49 35-4 20-21 28 10 24-18 32 15v187H233Z" fill="#f1f2ee" stroke="none"/>
+      <path d="m233 252 50-49 35-4 20-21 28 10 24-18 32 15" stroke-width="1.7"/>
+      <path d="m318 199-10 32 20 14-16 55m54-112-12 34 14 25-16 67" opacity=".22"/>
+    </g>
+    <path class="passage" d="M158 345C220 346 217 297 248 264S274 219 308 204" pathLength="1" stroke="currentColor" stroke-width="1.5" stroke-dasharray="1"/>
+    <g class="realm-barrier" stroke="currentColor" stroke-width="1.3">
+      <path class="barrier-upper" d="M242 291Q225 220 247 146"/>
+      <path class="barrier-lower" d="M242 307Q249 337 239 361"/>
+    </g>
+    <g class="insight-rays" stroke="currentColor" stroke-linecap="round">
+      <path d="m239 229-9-8m24 1 4-12m7 27 12-2"/>
+    </g>
+    <g class="practitioner">
+      <ellipse cx="0" cy="3" rx="38" ry="5" fill="#30372e" opacity=".08"/>
+      <g class="breath-ring" stroke="currentColor"><ellipse cx="0" cy="-51" rx="33" ry="24"/><ellipse cx="0" cy="-51" rx="43" ry="32" opacity=".3"/></g>
+      <g class="robe" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">
+        <path d="m-5-97-13 11-8 31 12 8-14 42 24-3 14 6 19-7-17-45 8-29-14-14Z" fill="#fcfcfa"/>
+        <path d="m-5-97 7 28 10-25M2-69-16-81m18 12 9 17M-13-48l24-4M-4-42-9-13m16-29 10 29"/>
+        <path d="m-20-75-13 17 22 15 8-12-13-7 8-12" fill="#fcfcfa"/>
+        <path d="m-10-7-3 8h-12m33-6 5 8h11"/>
+      </g>
+      <g class="sword-arm" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="m14-85 10 16 20-7 4 9-28 17-13-19" fill="#fcfcfa"/>
+        <path d="m46-69 4-3" stroke-width="5"/>
+        <path d="m44-79 12 10m-8-2 52-78-2 15-45 66Z" fill="#fcfcfa"/>
+        <path d="m49-70-7 12" stroke-width="3"/>
+        <path d="m42-58-8 7 2 10" class="sword-tassel"/>
+      </g>
+      <g fill="currentColor"><path d="M-9-108q-3-16 9-18 13 1 10 18l-5 11H-5Z"/><path d="M-4-126q-8-13 3-14 12 2 5 14Z"/><path d="m7-109 7 26-6-6-3-14Z"/></g>
+      <path d="m-9-113 19 1" stroke="#fcfcfa" stroke-width="1.5"/>
+      <circle cx="0" cy="-51" r="3" fill="currentColor"/>
+    </g>
+    <g stroke="currentColor" stroke-width="1.7"><path d="M21 354q53-15 100-7t91-1"/><path d="m45 364 48-4m31 7 35-3" opacity=".2"/></g>
+    <g class="landscape-labels" fill="currentColor"><text x="22" y="396">Outer practice + inner cultivation</text><text x="363" y="280" text-anchor="middle">The next realm</text><text class="barrier-label" x="217" y="163" text-anchor="end">The barrier</text></g>
+  </svg>
+  <div class="practice-controls" role="group" aria-label="Explore the wuxia illustration" hidden>
+    {stages.map((stage,i)=><button type="button" data-practice-stage={i} aria-pressed={i===0}><span>{stage.en}</span></button>)}
+  </div>
+  <figcaption>
+    {stages.map((stage,i)=><div data-practice-caption={i} hidden={i!==0}><strong>{stage.title}</strong><p>{stage.description}</p></div>)}
+    <small class="practice-note">A personal analogy behind the research.</small>
+  </figcaption>
+</figure>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-wuxia]').forEach(root=>{
+    root.querySelector<HTMLElement>('.practice-controls')!.hidden=false;
+    const buttons=root.querySelectorAll<HTMLButtonElement>('[data-practice-stage]');
+    buttons.forEach(button=>button.addEventListener('click',()=>{
+      const stage=button.dataset.practiceStage!;
+      root.dataset.stage=stage;
+      buttons.forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
+      root.querySelector('.practice-count')!.textContent=`0${Number(stage)+1} / 03`;
+      root.querySelectorAll<HTMLElement>('[data-practice-caption]').forEach(c=>c.hidden=c.dataset.practiceCaption!==stage);
+    }));
+  });
+</script>
+<style>
+  .wuxia-practice{color:#30372e;min-width:0;align-self:start;width:100%;}
+  .practice-heading{display:flex;justify-content:space-between;gap:12px;align-items:center;padding-bottom:12px;border-bottom:1px solid #d9dcd5;}
+  .practice-heading .eyebrow{font-size:9px;letter-spacing:.06em;}.practice-count{font-size:10px;font-variant-numeric:tabular-nums;color:#62675d;white-space:nowrap;}
+  svg{width:100%;height:auto;overflow:hidden;}.distant-ridges{opacity:.15;}.mountain-sun{opacity:.2;}.higher-ground{opacity:.55;transition:opacity 1.8s;}
+  .practitioner{transform:translate(130px,342px);transition:transform 2.2s cubic-bezier(.45,0,.2,1);}
+  .sword-arm{transform-origin:14px -85px;transition:transform 1.6s;}.breath-ring{opacity:.3;transform-origin:0 -51px;transition:opacity 1.5s,transform 1.8s;}
+  .realm-barrier{opacity:.4;}.barrier-upper,.barrier-lower{transition:transform 1.8s,opacity 1.8s;}.passage{stroke-dashoffset:1;opacity:.45;transition:stroke-dashoffset 2.2s;}
+  .insight-rays{opacity:0;transition:opacity 1.5s;}.landscape-labels{font-size:13px;font-weight:500;font-family:var(--sans);}.barrier-label{font-size:11px;opacity:.6;transition:opacity 1.5s;}
+  [data-stage="1"] .sword-arm,[data-stage="2"] .sword-arm{transform:rotate(27deg);}
+  [data-stage="1"] .breath-ring{opacity:.75;transform:scale(1.35);}[data-stage="2"] .breath-ring{opacity:.15;transform:scale(1.1);}
+  [data-stage="1"] .insight-rays{opacity:.8;}[data-stage="1"] .passage,[data-stage="2"] .passage{stroke-dashoffset:0;}
+  [data-stage="1"] .barrier-upper,[data-stage="2"] .barrier-upper{transform:translateY(-34px);opacity:.3;}
+  [data-stage="1"] .barrier-lower,[data-stage="2"] .barrier-lower{transform:translateY(23px);opacity:.3;}
+  [data-stage="2"] .practitioner{transform:translate(305px,200px) scale(.72);}[data-stage="2"] .higher-ground{opacity:1;}[data-stage="2"] .barrier-label{opacity:.2;}
+  .practice-controls{display:grid;grid-template-columns:repeat(3,1fr);border-block:1px solid #d9dcd5;}.practice-controls[hidden]{display:none;}
+  button{display:flex;flex-direction:column;align-items:center;gap:5px;padding:13px 5px;position:relative;}button+button{border-left:1px solid #d9dcd5;}
+  button:after{content:'';height:2px;position:absolute;bottom:-1px;left:0;right:0;background:currentColor;transform:scaleX(0);transition:transform .25s;}button[aria-pressed="true"]:after{transform:scaleX(1);}button[aria-pressed="true"]{background:#eef0e9;}
+  button span{font-size:12px;font-weight:600;}button:hover{background:#eef0e9;}
+  figcaption{padding-top:17px;}figcaption strong{font-size:13px;font-weight:600;line-height:1.5;display:block;}figcaption p{font-size:12px;line-height:1.65;margin:7px 0 0;color:#575b54;}
+  [data-practice-caption]{min-height:107px;}.practice-note{font-size:10px;line-height:1.6;display:block;color:#656b5f;margin-top:10px;}
+  @media(prefers-reduced-motion:reduce){*,*:after{transition:none!important;}}
+</style>
