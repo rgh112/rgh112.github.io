@@ -77,7 +77,7 @@ test('reduced motion and disabled JavaScript preserve the content',async({browse
   const fallback=await nojs.newPage();
   await fallback.goto('/');
   await expect(fallback.locator('.network-fallback').first()).toBeVisible();
-  await expect(fallback.getByText('Sometimes, it starts')).toBeVisible();
+  await expect(fallback.getByRole('heading',{name:'Selected research.'})).toBeVisible();
   await fallback.goto('/research/ood-resolution/');
   await expect(fallback.locator('.figure-open')).toHaveAttribute('href','/figures/ood-checkpoint-audit.webp');
   await expect(fallback.locator('.source-figure-image img')).toBeVisible();

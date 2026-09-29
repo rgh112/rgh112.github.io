@@ -28,7 +28,5 @@ import { profile } from '../data/profile';
     <div class="paper-grid">{papers.slice(0,4).map((paper,index)=><PaperCard paper={paper} index={index}/>)}</div>
   </section>
 
-  <section class="personal-note wrap" data-reveal><span class="eyebrow">Where a question begins</span><div><h2>Sometimes, it starts<br />with a <em>wuxia novel.</em></h2><p>In wuxia novels, accumulated inner power may not be enough to break through to the next realm: a crucial insight can still be missing. That barrier made me think about grokking—and the progress a model might make before generalization becomes visible.</p><a class="text-link" href="/research/ood-resolution/#origin">The story behind the research <span aria-hidden="true">↗</span></a></div><div class="wuxia-mark" aria-hidden="true"><span>Inner power</span><i>+</i><span>Insight</span><i class="wuxia-arrow">→</i><span>Breakthrough</span></div></section>
-
   <section class="about-strip wrap"><span class="eyebrow">A little context</span><p>I work at the <a href={profile.links.lab} target="_blank" rel="noopener noreferrer">Human Artificial Intelligence Research Lab ↗</a> at Yonsei University, with Professor Keeheon Lee. My research brings together machine learning, agent systems, and the people who use them.</p><a href="/about/" class="text-link">More about me <span aria-hidden="true">↗</span></a></section>
 </Layout>
