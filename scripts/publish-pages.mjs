@@ -4,7 +4,7 @@ import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
-const project = fileURLToPath(new URL('../', import.meta.url));
+const project = resolve(fileURLToPath(new URL('../', import.meta.url)));
 const dist = join(project, 'dist');
 function git(cwd, args, allowed = [0]) {
   const result = spawnSync('git', ['-c', `safe.directory=${cwd.replaceAll('\\', '/')}`, ...args], { cwd, encoding: 'utf8' });
