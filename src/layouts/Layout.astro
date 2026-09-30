@@ -4,7 +4,7 @@ import '../styles/global.css';
 import '../styles/visual.css';
 import { profile } from '../data/profile';
 interface Props { title?: string; description?: string; }
-const { title, description = 'Kunhee Ryu is a researcher at Yonsei University working on language model evaluation, scientific exploration, and decision-making in agent systems.' } = Astro.props;
+const { title, description = 'Kunhee Ryu is a researcher at Yonsei University interested in how AI represents its environment and anticipates the consequences of its actions.' } = Astro.props;
 const current = Astro.url.pathname;
 const canonical = Astro.site ? new URL(current, Astro.site).href : undefined;
 const nav = [['Research', '/research/'], ['Directions', '/directions/'], ['About', '/about/'], ['CV', '/cv/']];
