@@ -12,20 +12,20 @@ import { profile } from '../data/profile';
     <div class="hero-copy">
       <h1>I’m Kunhee Ryu,<br />a researcher at Yonsei University.</h1>
       <p class="hero-intro">My research focuses on language model evaluation, scientific exploration, and decision-making in agent systems.</p>
-      <a href="/research/" class="text-link">Explore my research <span aria-hidden="true">↗</span></a>
+      <a href="/research/" class="text-link">View research <span aria-hidden="true">↗</span></a>
     </div>
     <div class="hero-art"><Network /></div>
-    <div class="hero-foot"><span>Representation → Reasoning → Action</span><a href="#thread">Follow the questions <span aria-hidden="true">↓</span></a></div>
+    <div class="hero-foot"><span>Representation → Reasoning → Action</span><a href="#thread">Research overview <span aria-hidden="true">↓</span></a></div>
   </section>
 
-  <section class="intro-strip wrap" data-reveal><span class="eyebrow">The thread through my work</span><p>What must an AI understand<br />to make its <em>next move?</em></p><span class="intro-aside">From scientific evidence<br />to decisions that unfold over time.</span></section>
+  <section class="intro-strip wrap" data-reveal><span class="eyebrow">Research overview</span><p>How do agents use evidence<br />to choose their <em>next action?</em></p><span class="intro-aside">Evidence extraction, verification,<br />and sequential decisions.</span></section>
 
   <ResearchStory />
 
   <section class="selected-work wrap" aria-labelledby="selected-title">
-    <div class="section-heading"><div><span class="eyebrow">Questions, made concrete</span><h2 id="selected-title">Selected <em>research.</em></h2></div><a class="text-link" href="/research/">All research <span aria-hidden="true">↗</span></a></div>
+    <div class="section-heading"><div><span class="eyebrow">Publications</span><h2 id="selected-title">Selected <em>research.</em></h2></div><a class="text-link" href="/research/">All research <span aria-hidden="true">↗</span></a></div>
     <div class="paper-grid">{papers.slice(0,4).map((paper,index)=><PaperCard paper={paper} index={index}/>)}</div>
   </section>
 
-  <section class="about-strip wrap"><span class="eyebrow">A little context</span><p>I work at the <a href={profile.links.lab} target="_blank" rel="noopener noreferrer">Human Artificial Intelligence Research Lab ↗</a> at Yonsei University, with Professor Keeheon Lee. My research brings together machine learning, agent systems, and the people who use them.</p><a href="/about/" class="text-link">More about me <span aria-hidden="true">↗</span></a></section>
+  <section class="about-strip wrap"><span class="eyebrow">About</span><p>I work at the <a href={profile.links.lab} target="_blank" rel="noopener noreferrer">Human Artificial Intelligence Research Lab ↗</a> at Yonsei University, with Professor Keeheon Lee. I joined the lab in 2021.</p><a href="/about/" class="text-link">More about me <span aria-hidden="true">↗</span></a></section>
 </Layout>

@@ -11,13 +11,13 @@ export type Paper = {
 export const papers: Paper[] = [
   {
     slug: 'beyond-local-validity', title: 'Evaluating LLM Agents Beyond Local Edit Validity',
-    short: 'A valid step. A reachable goal?', year: 2026, venue: 'Findings of EMNLP 2026',
+    short: 'Local validity and goal reachability', year: 2026, venue: 'Findings of EMNLP 2026',
     category: 'Agents & planning', status: 'Accepted', authors: 'Kunhee Ryu, Chi-Guhn Lee, and Keeheon Lee',
     question: 'Can an AI explore scientific possibilities through patterns and edits?',
-    summary: 'From changing a letter to editing a composition or protein sequence: I study whether a valid local change keeps a successful outcome within reach.',
+    summary: 'I study whether an allowed edit to a word, composition, or protein sequence can make the final goal unreachable.',
     role: 'Lead researcher · First author', code: 'https://github.com/rgh112/llm-agents-beyond-local-edit-validity',
-    originLabel: 'The question behind the work',
-    origin: 'I started from the possibility that LLMs could participate in scientific research through patterns and editing. An agent might recognize a useful pattern, modify a candidate, and move toward a better solution. This led me to ask what we need to measure when those small edits accumulate into a scientific search.',
+    originLabel: 'Research motivation',
+    origin: 'I was interested in whether LLMs could contribute to scientific research by recognizing patterns and editing candidate solutions. To study this, I looked at sequences of small changes and asked whether each change still left a way to reach the goal.',
     method: 'We use a shared editing protocol across Word Ladder, an alloy composition proxy, and a restricted GB1 protein fitness landscape. Each task separates the admissibility of the next edit from the delayed objective. We then audit recoverability: whether at least one successful completion remains within the available edit budget. GB1 permits exact enumeration; the alloy setting uses bounded probes.',
     finding: 'Across six models, many trajectories contain only well-formed, locally admissible actions but still fail the final objective. Among these surface-clean episodes, success is 16.0% in the alloy proxy and 6.8% in GB1. In the exact GB1 audit, 51.4% of surface-clean episodes cross a boundary beyond which the goal is no longer reachable within the remaining budget.',
     limitation: 'These are controlled editing environments. The alloy task is a proxy, and the GB1 analysis covers a restricted finite landscape. The findings diagnose obstacles to scientific search; they do not demonstrate autonomous scientific discovery or generalize directly to unrestricted materials and protein design.',
@@ -27,7 +27,7 @@ export const papers: Paper[] = [
   },
   {
     slug: 'ood-resolution', title: 'Out-of-Distribution Checkpoint Selection Has a Resolution Problem: Auditing Sparse Exact Match with Token Likelihood',
-    short: 'When progress is hard to see.', year: 2026, venue: 'Findings of EMNLP 2026',
+    short: 'Checkpoint selection with limited validation data', year: 2026, venue: 'Findings of EMNLP 2026',
     category: 'Learning & evaluation', status: 'Accepted', authors: 'Kunhee Ryu and Keeheon Lee',
     question: 'What happens before learning becomes visible?',
     summary: 'Small validation sets can assign the same score to different checkpoints. I study what those ties hide about generalization and model selection.',
@@ -35,7 +35,7 @@ export const papers: Paper[] = [
     originLabel: 'Research motivation',
     origin: 'Reading wuxia novels, I noticed a distinction between lacking inner power and lacking the insight needed for a breakthrough. It reminded me of grokking: learning can precede visible generalization. This led me to ask what an exact-match score might miss while a language model is still learning.',
     method: 'The paper investigates a concrete measurement problem: several checkpoints can receive the same exact-match score on a small labeled out-of-distribution validation set. We compare exact match, token likelihood, and the latest checkpoint among ties across semantic parsing and morphological reinflection settings. The central audit uses 600 draws from 30 training runs.',
-    finding: 'With eight labeled references, all early checkpoints score zero in 48% of draws, and the maximum exact-match score is tied in 57%. Token likelihood distinguishes some tied candidates. Choosing the latest tied checkpoint performs better on average for mostly improving trajectories. The useful outcome is an explicit reporting protocol that makes these choices visible.',
+    finding: 'With eight labeled references, all early checkpoints score zero in 48% of draws, and the maximum exact-match score is tied in 57%. Token likelihood distinguishes some tied candidates. Choosing the latest tied checkpoint performs better on average for mostly improving trajectories. We propose a reporting protocol that records how ties are handled during checkpoint selection.',
     limitation: 'The wuxia analogy describes the origin of the question. The experiments do not establish separate mechanisms equivalent to inner power and insight. Token likelihood needs labeled target outputs, and it is not a universally superior selection rule. The paper concerns the resolution of checkpoint selection under a small labeled validation budget.',
     next: 'Which representations make new relationships learnable, and which measurements can tell us whether those representations will support transfer?',
     diagram: 'learning',
@@ -43,7 +43,7 @@ export const papers: Paper[] = [
   },
   {
     slug: 'autometa', title: 'AutoMETA: A Multi-Agent LLM System for Autonomous Meta-Analysis',
-    short: 'From individual evidence to shared conclusions.', year: 2026, venue: 'AAMAS 2026 · Main track',
+    short: 'Multi-agent meta-analysis', year: 2026, venue: 'AAMAS 2026 · Main track',
     category: 'Multi-agent systems', status: 'Published', authors: 'Keeheon Lee and Kunhee Ryu',
     question: 'How can agents combine evidence without losing its provenance?',
     summary: 'Study-centered agents extract, critique, and revise evidence before a statistical module synthesizes the results.',
@@ -57,7 +57,7 @@ export const papers: Paper[] = [
   },
   {
     slug: 'clinician-trust', title: 'Can Transparency Help Clinicians Trust AI? Reframing Trust as an Information Foraging and Sensemaking Loop',
-    short: 'Trust takes a closer look.', year: 2026, venue: 'CHI EA 2026',
+    short: 'How clinicians verify AI answers', year: 2026, venue: 'CHI EA 2026',
     category: 'Human–AI interaction', status: 'Published', authors: 'Kunhee Ryu, Heeyoung (Emily) Ghang, Sechang Chon, Keeheon Lee, and Younah Kang',
     question: 'How do people work through evidence to decide whether to rely on AI?',
     summary: 'An exploratory study follows how people inspect, revisit, and interpret evidence while evaluating an AI-generated answer.',
@@ -71,7 +71,7 @@ export const papers: Paper[] = [
   },
   {
     slug: 'moral-profile-dynamics', title: 'Manners Maketh MAN: Moral-Profile Diversity and Cooperative Dynamics in LLM-Based Multi-Agent Simulation',
-    short: 'How a group learns to share.', year: 2026, venue: 'AAMAS 2026 · ASI Workshop',
+    short: 'Cooperation among agents with different priorities', year: 2026, venue: 'AAMAS 2026 · ASI Workshop',
     category: 'Multi-agent systems', status: 'Workshop', authors: 'Keeheon Lee, Kunhee Ryu, and Hogyun Yoo',
     question: 'How do different moral priorities affect cooperation among artificial agents?',
     summary: 'A shared-space simulation studies the interaction of moral profiles, episodic memory, and feedback on individual contributions.',
@@ -84,7 +84,7 @@ export const papers: Paper[] = [
   },
   {
     slug: 'norm-dynamics', title: 'Manners Maketh MAN: Multi-Agent Norm Dynamics under Cultural Moral Values',
-    short: 'Shared rules, different priorities.', year: 2026, venue: 'CHI 2026 · PoliSim Workshop',
+    short: 'Rules and moral profiles in agent simulations', year: 2026, venue: 'CHI 2026 · PoliSim Workshop',
     category: 'Multi-agent systems', status: 'Workshop', authors: 'Keeheon Lee, Kunhee Ryu, Minje Kim, and Hogyun Yoo',
     question: 'How do shared rules interact with different moral profiles?',
     summary: 'A multi-agent sandbox studies how institutional rules and agent composition shape behavior in a shared environment.',
@@ -97,7 +97,7 @@ export const papers: Paper[] = [
   },
   {
     slug: 'counting-pixels', title: 'Counting Pixels for an Effective Axis Detection',
-    short: 'Finding structure in a figure.', year: 2022, venue: 'IEEE IRI 2022',
+    short: 'Detecting axes in scientific charts', year: 2022, venue: 'IEEE IRI 2022',
     category: 'Information extraction', status: 'Published', authors: 'Keeheon Lee, Eury Sohn, Kunhee Ryu, and Seongmin Oh',
     question: 'How can a simple visual rule help recover data from scientific charts?',
     summary: 'A rule-based axis detector uses pixel counting to locate the structure needed for chart data extraction.',

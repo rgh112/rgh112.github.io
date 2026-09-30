@@ -23,7 +23,7 @@ test('topic filter, search, empty state, and reset work together', async ({page}
   await page.goto('/research/');
   await page.getByRole('button',{name:'Learning & evaluation',exact:true}).click();
   await expect(page.locator('.paper-card:visible')).toHaveCount(1);
-  await expect(page.locator('.paper-card:visible')).toContainText('When progress is hard to see.');
+  await expect(page.locator('.paper-card:visible')).toContainText('Checkpoint selection with limited validation data');
   await page.getByRole('searchbox').fill('no-such-paper');
   await expect(page.getByText('No matching research.')).toBeVisible();
   await page.getByRole('button',{name:'Clear filters'}).click();

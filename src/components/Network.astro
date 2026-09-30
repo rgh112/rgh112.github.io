@@ -8,7 +8,7 @@ const nodes = Array.from({length: 95}, (_, i) => { const a = i * 2.39996; const 
     <svg class="network-fallback" viewBox="0 0 520 480"><g stroke="currentColor" stroke-width=".65" opacity=".23">{nodes.map((n,i) => nodes.slice(i+1).filter(m => Math.hypot(n.x-m.x,n.y-m.y)<66).map(m => <line x1={n.x} y1={n.y} x2={m.x} y2={m.y}/>))}</g>{nodes.map(n=><circle cx={n.x} cy={n.y} r="2" fill="currentColor"/>)}</svg>
   </div>
   <span class="network-label label-a">{story ? 'EVIDENCE' : 'REPRESENTATION'}</span><span class="network-label label-b">{story ? 'DECISION' : 'REASONING'}</span><span class="network-label label-c">{story ? 'CONSEQUENCE' : 'ACTION'}</span>
-  <div class="network-bottom"><span class="eyebrow">{story ? 'A question taking shape' : 'Relations become possibilities'}</span><button class="motion-button" type="button" aria-label="Pause network animation" aria-pressed="false" hidden><span aria-hidden="true">Ⅱ</span></button></div>
+  <div class="network-bottom"><span class="eyebrow">{story ? 'Evidence and decisions' : 'Network visualization'}</span><button class="motion-button" type="button" aria-label="Pause network animation" aria-pressed="false" hidden><span aria-hidden="true">Ⅱ</span></button></div>
 </div>
 <script>
   // Keep the illustrated fallback visible while the optional WebGL module loads.
