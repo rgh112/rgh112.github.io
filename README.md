@@ -22,7 +22,9 @@ The build checks Astro types and audits the generated public files.
 
 ## Publish
 
-Website: https://rgh112.github.io/
+Website: https://kunheeryu.com/
+
+The custom domain is preserved by `public/CNAME`; `astro.config.mjs` sets canonical URLs.
 
 Source lives on `main`. GitHub Pages serves the built site from the root of `gh-pages`.
 After committing and pushing source changes, publish with:

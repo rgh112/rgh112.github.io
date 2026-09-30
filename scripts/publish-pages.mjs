@@ -40,7 +40,7 @@ try {
     git(staging, ['commit', '-m', `Publish website from ${revision}`]);
     const result = git(staging, ['push', 'origin', 'HEAD:gh-pages']);
     console.log(result.stdout || result.stderr);
-    console.log('Uploaded to gh-pages. Website: https://rgh112.github.io/');
+    console.log('Uploaded to gh-pages. Website: https://kunheeryu.com/');
   }
 } finally {
   // Only remove the freshly created staging directory under the OS temp root.
