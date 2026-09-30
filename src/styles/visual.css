@@ -94,6 +94,11 @@ em { font-family: inherit; font-style: normal; font-weight: inherit; }
 .footer-bottom { font-size: 11px; border-top: 0; }
 .cv-section h3 { font-weight: 600; }
 .cv-section > h2 { font-weight: 650; }
+.cv-roles { margin-bottom: 0; }
+.cv-section .cv-group-label { color: var(--muted); margin-bottom: 14px; }
+.cv-compact-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.cv-compact-list li { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 24px; font-size: 12px; line-height: 1.7; break-inside: avoid; }
+.cv-compact-list .cv-date { font-size: 10px; color: var(--muted); white-space: nowrap; }
 
 @media (max-width: 1100px) {
   .hero h1 { font-size: 32px; }
@@ -141,6 +146,7 @@ em { font-family: inherit; font-style: normal; font-weight: inherit; }
   .footer-bottom { font-size: 10px; }
 }
 @media (max-width: 480px) {
+  .cv-compact-list li { grid-template-columns: 1fr; gap: 2px; }
   .hero h1 { font-size: 28px; }
   .hero-foot > span, .hero-foot > a { font-size: 8px; }
   .network-label { font-size: 7px; }
@@ -148,6 +154,8 @@ em { font-family: inherit; font-style: normal; font-weight: inherit; }
   .wuxia-inline b { font-size: 21px; }
 }
 @media print {
+  .cv-compact-list li { grid-template-columns: minmax(0, 1fr) auto; font-size: 9pt; gap: 20px; }
+  .cv-compact-list .cv-date { font-size: 8pt; }
   .eyebrow { font-size: 8px; }
   .cv-section > h2 { font-size: 9pt; }
   .cv-section h3 { font-size: 10pt; }
