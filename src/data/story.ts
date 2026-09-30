@@ -29,7 +29,7 @@ export const story = [
   {
     n: '04', label: 'Looking ahead', title: 'Learn to anticipate.',
     text: 'I now want to connect these questions through representation learning and world models: learning relationships that transfer, anticipating the effects of actions, and knowing when more information is needed.',
-    link: '/directions/', cta: 'The questions I want to pursue',
+    link: '/directions/', cta: 'Research directions',
     visualTitle: 'Predict the consequence before acting',
     visualCaption: 'Can a learned model anticipate which edit would preserve a route to the goal?',
     visualAlt: 'A future research direction: predict the consequences of two possible edits before selecting an action. Dashed branches denote predictions to be tested.',
