@@ -87,7 +87,7 @@ const stages = [
   [data-stage="1"] .barrier-lower,[data-stage="2"] .barrier-lower{transform:translateY(23px);opacity:.3;}
   [data-stage="2"] .practitioner{transform:translate(305px,200px) scale(.72);}[data-stage="2"] .higher-ground{opacity:1;}[data-stage="2"] .barrier-label{opacity:.2;}
   .practice-controls{display:grid;grid-template-columns:repeat(3,1fr);border-block:1px solid #d9dcd5;}.practice-controls[hidden]{display:none;}
-  button{display:flex;flex-direction:column;align-items:center;gap:5px;padding:13px 5px;position:relative;}button+button{border-left:1px solid #d9dcd5;}
+  button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:48px;padding:13px 5px;position:relative;}button+button{border-left:1px solid #d9dcd5;}
   button:after{content:'';height:2px;position:absolute;bottom:-1px;left:0;right:0;background:currentColor;transform:scaleX(0);transition:transform .25s;}button[aria-pressed="true"]:after{transform:scaleX(1);}button[aria-pressed="true"]{background:#eef0e9;}
   button span{font-size:12px;font-weight:600;}button:hover{background:#eef0e9;}
   figcaption{padding-top:17px;}figcaption strong{font-size:13px;font-weight:600;line-height:1.5;display:block;}figcaption p{font-size:12px;line-height:1.65;margin:7px 0 0;color:#575b54;}

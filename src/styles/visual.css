@@ -160,3 +160,36 @@ em { font-family: inherit; font-style: normal; font-weight: inherit; }
   .cv-section > h2 { font-size: 9pt; }
   .cv-section h3 { font-size: 10pt; }
 }
+
+/* Keep controls usable by touch without shrinking their labels to fit. */
+@media screen and (max-width: 760px) {
+  .site-header { gap: 10px; }
+  .brand { min-width: 44px; min-height: 44px; }
+  .site-header nav { gap: 6px; }
+  .site-header nav a { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding: 8px 5px; }
+  .text-link, .chapter-copy .inline-link, .direction-connection .inline-link,
+  .back-link, .about-socials a, .cv-socials a, .footer-bottom a {
+    display: inline-flex; align-items: center; min-height: 44px;
+  }
+  .motion-button { width: 44px; height: 44px; flex-shrink: 0; }
+  .hero-foot { flex-wrap: wrap; gap: 4px 16px; padding: 12px 0; }
+  .hero-foot > span { font-size: 10px; }
+  .hero-foot > a { min-height: 44px; align-items: center; font-size: 11px; }
+  .network-label { font-size: 9px; }
+  .network-bottom .eyebrow { font-size: 9px; }
+  .section-heading { flex-wrap: wrap; }
+  .section-heading > .text-link { font-size: 12px; }
+  .filter-buttons { gap: 6px; }
+  .filter-button { min-height: 44px; font-size: 12px; padding: 10px; }
+  .search-label input { min-height: 44px; font-size: 16px; }
+  .detail-sidebar nav { gap: 4px 14px; }
+  .detail-sidebar a { display: inline-flex; align-items: center; min-height: 44px; font-size: 12px; }
+  .diagram-controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .diagram-controls button { min-height: 48px; font-size: 12px; line-height: 1.4; padding: 10px 8px; }
+  .diagram .svg-label { font-size: 24px; }
+  .diagram .svg-caption { font-size: 21px; }
+  .diagram .svg-title { font-size: 28px; }
+  .card-visual { padding-inline: 6px; }
+  .publication-links .button { font-size: 12px; }
+  .footer-bottom > div { flex-wrap: wrap; gap: 0 16px; }
+}

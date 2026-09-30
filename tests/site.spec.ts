@@ -1,6 +1,41 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
+test('touch layouts keep controls usable, story text visible, and figure zoom contained',async({browser})=>{
+  for(const viewport of [{width:320,height:568},{width:390,height:844},{width:430,height:932},{width:844,height:390}]){
+    const context=await browser.newContext({viewport,isMobile:true,hasTouch:true});
+    const page=await context.newPage();
+    await page.goto('/');await page.evaluate(()=>document.fonts.ready);
+    if(viewport.width<760){
+      for(const link of await page.locator('.site-header nav a, .story-steps a').all()){
+        expect((await link.boundingBox())!.height).toBeGreaterThanOrEqual(44);
+      }
+    }
+    await page.locator('[data-step="0"]').tap();
+    await page.waitForTimeout(700);
+    await page.evaluate(()=>scrollBy({top:200,behavior:'instant'}));
+    const copy=page.locator('.chapter-copy').first();
+    await expect.poll(async()=>copy.evaluate(el=>el.getBoundingClientRect().bottom)).toBeLessThan(viewport.height);
+    expect(await copy.evaluate(el=>el.getBoundingClientRect().top)).toBeGreaterThanOrEqual(0);
+    await page.goto('/research/autometa/');
+    const trigger=page.locator('.figure-open');await trigger.scrollIntoViewIfNeeded();
+    const before=await page.evaluate(()=>scrollY);await trigger.tap();
+    const dialog=page.getByRole('dialog');await expect(dialog).toBeVisible();
+    await dialog.locator('img').evaluate((el:HTMLImageElement)=>el.decode());
+    const close=page.getByRole('button',{name:'Close figure'});
+    const box=(await close.boundingBox())!;
+    expect(box.y).toBeGreaterThanOrEqual(0);expect(box.y+box.height).toBeLessThan(viewport.height);
+    expect(await dialog.locator('.viewer-canvas').evaluate(el=>el.clientHeight)).toBeGreaterThan(150);
+    await page.getByRole('button',{name:'Zoom in',exact:true}).tap();
+    expect(await dialog.locator('.viewer-canvas').evaluate(el=>el.scrollWidth>el.clientWidth)).toBe(true);
+    expect(await page.evaluate(()=>getComputedStyle(document.body).position)).toBe('fixed');
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+    await close.tap();await expect(dialog).not.toBeVisible();
+    await expect.poll(async()=>Math.abs(await page.evaluate(()=>scrollY)-before)).toBeLessThan(2);
+    await expect(trigger).toBeFocused();await context.close();
+  }
+});
+
 const pages = ['/', '/research/', '/directions/', '/about/', '/cv/', '/research/beyond-local-validity/', '/research/ood-resolution/', '/research/autometa/', '/research/clinician-trust/', '/research/moral-profile-dynamics/', '/research/norm-dynamics/', '/research/counting-pixels/'];
 
 test('all pages render, internal links resolve, and public text excludes private material', async ({page, request}) => {

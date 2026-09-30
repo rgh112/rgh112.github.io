@@ -22,10 +22,21 @@ const {figure:f}=Astro.props;
     const dialog=figure.querySelector<HTMLDialogElement>('.figure-viewer')!;
     const zoom=dialog.querySelector<HTMLButtonElement>('[data-figure-zoom]')!;
     const canvas=dialog.querySelector<HTMLElement>('.viewer-canvas')!;
+    let opener:HTMLAnchorElement|null=null;
+    let savedScroll=0;
+    let bodyStyle:string|null=null;
     figure.querySelectorAll<HTMLAnchorElement>('[data-figure-open]').forEach(link=>link.addEventListener('click',event=>{
       if(event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
-      event.preventDefault();dialog.classList.remove('is-zoomed');zoom.setAttribute('aria-pressed','false');zoom.textContent='Zoom in';dialog.showModal();
+      event.preventDefault();
+      opener=link;savedScroll=scrollY;bodyStyle=document.body.getAttribute('style');
+      Object.assign(document.body.style,{position:'fixed',top:`-${savedScroll}px`,width:'100%'});
+      dialog.classList.remove('is-zoomed');zoom.setAttribute('aria-pressed','false');zoom.textContent='Zoom in';
+      dialog.querySelector('img')!.loading='eager';dialog.showModal();canvas.scrollTo(0,0);
     }));
+    dialog.addEventListener('close',()=>{
+      if(bodyStyle===null)document.body.removeAttribute('style');else document.body.setAttribute('style',bodyStyle);
+      scrollTo({top:savedScroll,behavior:'instant'});opener?.focus({preventScroll:true});
+    });
     dialog.querySelector('[data-figure-close]')!.addEventListener('click',()=>dialog.close());
     dialog.addEventListener('click',event=>{if(event.target!==dialog)return;const box=dialog.getBoundingClientRect();if(event.clientX<box.left||event.clientX>box.right||event.clientY<box.top||event.clientY>box.bottom)dialog.close();});
     zoom.addEventListener('click',()=>{
@@ -47,4 +58,28 @@ const {figure:f}=Astro.props;
   .viewer-credit{padding:14px 24px;border-top:1px solid var(--line);font-size:10px;color:var(--muted);line-height:1.6;}.viewer-credit a{text-decoration:underline;margin-left:12px;white-space:nowrap;}
   @media(max-width:760px){.paper-source-figure{padding-top:22px;margin-top:28px;}.source-figure-heading{gap:14px;align-items:flex-start;margin-bottom:20px;}.source-figure-heading h3{font-size:20px;}.figure-open{font-size:11px;gap:6px;}.source-figure-image{padding:8px;}.figure-reading-guide{grid-template-columns:1fr;gap:18px;}.source-figure-caption{font-size:12px;}.viewer-toolbar{padding:14px;align-items:flex-start;flex-direction:column;gap:12px;}.viewer-toolbar h2{font-size:15px;}.viewer-toolbar>div{width:100%;justify-content:flex-end;}.viewer-toolbar button{padding:8px 13px;}.viewer-canvas{padding:12px;max-height:calc(92svh - 220px);}.viewer-canvas img{max-height:calc(92svh - 244px);}.is-zoomed .viewer-canvas img{max-height:none;}.viewer-credit{padding:12px 14px;}}
   @media print{.figure-open,.figure-viewer{display:none;}.paper-source-figure{break-inside:avoid;}}
+  @media screen{
+    .figure-viewer{height:min(1000px,92dvh);max-height:92dvh;overflow:hidden;}
+    .figure-viewer[open]{display:flex;flex-direction:column;}
+    .viewer-toolbar,.viewer-credit{flex-shrink:0;}
+    .viewer-toolbar button{min-height:44px;}
+    .viewer-canvas{flex:1;min-height:0;max-height:none;}
+    .viewer-canvas img{width:100%;height:100%;max-height:none;}
+    .is-zoomed .viewer-canvas img{height:auto;}
+  }
+  @media screen and (max-width:760px){
+    .source-figure-heading{flex-wrap:wrap;}
+    .figure-open{min-height:44px;padding:10px 14px;border:1px solid var(--line);font-size:12px;align-items:center;}
+    .figure-viewer{width:calc(100vw - 24px);max-width:calc(100vw - 24px);height:calc(100dvh - 24px);max-height:calc(100dvh - 24px);}
+    .viewer-canvas{max-height:none;}
+    .viewer-canvas img{max-height:none;}
+    .viewer-credit a{display:inline-flex;align-items:center;min-height:44px;}
+  }
+  @media screen and (max-height:500px) and (orientation:landscape){
+    .viewer-toolbar{flex-direction:row;align-items:center;padding:8px 12px;gap:12px;}
+    .viewer-toolbar>div{width:auto;}
+    .viewer-toolbar h2{font-size:13px;}
+    .viewer-credit{padding:4px 12px;}
+    .viewer-canvas{padding:8px;}
+  }
 </style>

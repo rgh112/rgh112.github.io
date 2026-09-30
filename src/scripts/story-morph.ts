@@ -85,7 +85,8 @@ export function initStoryMorph(root: HTMLElement) {
   }
   function schedule(){readTarget();if(!frame)frame=requestAnimationFrame(tick);}
   function measure(){
-    const mobile=innerWidth<=1000;
+    const mobile=innerWidth<=1000 && !(innerWidth>=600 && innerWidth>innerHeight);
+    root.style.setProperty('--story-copy-top',`${sticky.offsetHeight+20}px`);
     const line=mobile?sticky.offsetHeight+38:innerHeight*.39;
     anchors=chapters.map(chapter=>chapter.getBoundingClientRect().top+scrollY+parseFloat(getComputedStyle(chapter).paddingTop)-line);
     schedule();
