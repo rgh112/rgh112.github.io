@@ -71,7 +71,7 @@ test('reduced motion and disabled JavaScript preserve the content',async({browse
   await page.goto('/');
   const motion=page.getByRole('button',{name:'Play network animation'}).first();
   if(await motion.isVisible())await expect(motion).toHaveAttribute('aria-pressed','true');
-  await expect(page.getByRole('heading',{name:'Learning to reason. Learning to act.'})).toBeVisible();
+  await expect(page.getByRole('heading',{name:'I’m Kunhee Ryu, a researcher at Yonsei University.'})).toBeVisible();
   await context.close();
   const nojs=await browser.newContext({javaScriptEnabled:false});
   const fallback=await nojs.newPage();
