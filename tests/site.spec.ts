@@ -1,6 +1,30 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
+test('intro drawing responds to a pointer, settles on touch, and respects reduced motion',async({browser})=>{
+  const desktop=await browser.newContext({viewport:{width:1440,height:900}});
+  const page=await desktop.newPage();await page.goto('/');
+  const drawing=page.locator('[data-line-drawing]');
+  const path=drawing.locator('path').nth(3);
+  const original=await path.getAttribute('d');
+  const box=(await drawing.boundingBox())!;
+  await page.mouse.move(box.x+box.width*.5,box.y+box.height*.35);
+  await expect.poll(()=>path.getAttribute('d')).not.toBe(original);
+  await page.mouse.move(0,0);await expect(path).toHaveAttribute('d',original!);
+  await page.emulateMedia({reducedMotion:'reduce'});
+  await page.mouse.move(box.x+box.width*.5,box.y+box.height*.35);
+  await page.waitForTimeout(250);await expect(path).toHaveAttribute('d',original!);
+  await desktop.close();
+  const touch=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+  const mobile=await touch.newPage();await mobile.goto('/');
+  const mobilePath=mobile.locator('[data-line-drawing] path').nth(3);
+  await expect.poll(()=>mobilePath.getAttribute('d')).not.toBe(original);
+  await expect(mobilePath).toHaveAttribute('d',original!,{timeout:6000});
+  await mobile.waitForTimeout(300);await expect(mobilePath).toHaveAttribute('d',original!);
+  expect(await mobile.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+  await touch.close();
+});
+
 test('touch layouts keep controls usable, story text visible, and figure zoom contained',async({browser})=>{
   for(const viewport of [{width:320,height:568},{width:390,height:844},{width:430,height:932},{width:844,height:390}]){
     const context=await browser.newContext({viewport,isMobile:true,hasTouch:true});

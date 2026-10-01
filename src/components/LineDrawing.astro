@@ -1,0 +1,19 @@
+---
+import { drawingPath } from '../scripts/line-drawing';
+---
+<div class="line-drawing" data-line-drawing aria-hidden="true">
+  <svg viewBox="0 0 320 190" fill="none" focusable="false">
+    {Array.from({length:7},(_,i)=><path d={drawingPath(i)} stroke="currentColor" stroke-width={i===3 ? 1.2 : .8} opacity={i===3 ? .75 : .27+Math.abs(i-3)*.07}/>) }
+  </svg>
+</div>
+<script>
+  import { initLineDrawing } from '../scripts/line-drawing';
+  document.querySelectorAll<HTMLElement>('[data-line-drawing]').forEach(initLineDrawing);
+</script>
+<style>
+  .line-drawing{width:280px;max-width:100%;justify-self:center;align-self:center;margin-bottom:64px;color:#30372e;}
+  svg{width:100%;height:auto;overflow:visible;}
+  path{stroke-linecap:round;stroke-linejoin:round;}
+  @media(max-width:760px){.line-drawing{width:180px;justify-self:end;margin:-12px 4px 20px 0;}}
+  @media print{.line-drawing{display:none;}}
+</style>
