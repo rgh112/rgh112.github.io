@@ -104,14 +104,12 @@ test('reduced motion and disabled JavaScript preserve the content',async({browse
   const context=await browser.newContext({reducedMotion:'reduce'});
   const page=await context.newPage();
   await page.goto('/');
-  const motion=page.getByRole('button',{name:'Play network animation'}).first();
-  if(await motion.isVisible())await expect(motion).toHaveAttribute('aria-pressed','true');
   await expect(page.getByRole('heading',{name:'Kunhee Ryu',exact:true})).toBeVisible();
   await context.close();
   const nojs=await browser.newContext({javaScriptEnabled:false});
   const fallback=await nojs.newPage();
   await fallback.goto('/');
-  await expect(fallback.locator('.network-fallback').first()).toBeVisible();
+  await expect(fallback.locator('.chapter-figure').first()).toBeVisible();
   await expect(fallback.getByRole('heading',{name:'Selected research.'})).toBeVisible();
   await fallback.goto('/research/ood-resolution/');
   await expect(fallback.locator('.figure-open')).toHaveAttribute('href','/figures/ood-checkpoint-audit.webp');

@@ -1,6 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Network from '../components/Network.astro';
 import PaperCard from '../components/PaperCard.astro';
 import ResearchStory from '../components/ResearchStory.astro';
 import { papers } from '../data/papers';
@@ -14,8 +13,7 @@ import { profile } from '../data/profile';
       <p class="hero-intro">I’m interested in how AI represents its environment and anticipates the consequences of its actions.</p>
       <a href="/research/" class="text-link">View research <span aria-hidden="true">↗</span></a>
     </div>
-    <div class="hero-art"><Network /></div>
-    <div class="hero-foot"><span>Representation → Reasoning → Action</span><a href="#thread">Research overview <span aria-hidden="true">↓</span></a></div>
+    <div class="hero-foot"><a href="#thread">Research overview <span aria-hidden="true">↓</span></a></div>
   </section>
 
   <section class="intro-strip wrap" data-reveal><span class="eyebrow">Research overview</span><p>How do agents use evidence<br />to choose their <em>next action?</em></p><span class="intro-aside">Evidence extraction, verification,<br />and sequential decisions.</span></section>
