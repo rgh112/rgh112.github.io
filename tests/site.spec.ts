@@ -4,8 +4,8 @@ import AxeBuilder from '@axe-core/playwright';
 test('intro drawing responds to a pointer, settles on touch, and respects reduced motion',async({browser})=>{
   const desktop=await browser.newContext({viewport:{width:1440,height:900}});
   const page=await desktop.newPage();await page.goto('/');
-  const drawing=page.locator('[data-line-drawing]');
-  const path=drawing.locator('path').nth(3);
+  const drawing=page.locator('[data-trajectory-sketch]');
+  const path=drawing.locator('[data-future]');
   const original=await path.getAttribute('d');
   const box=(await drawing.boundingBox())!;
   await page.mouse.move(box.x+box.width*.5,box.y+box.height*.35);
@@ -17,7 +17,7 @@ test('intro drawing responds to a pointer, settles on touch, and respects reduce
   await desktop.close();
   const touch=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
   const mobile=await touch.newPage();await mobile.goto('/');
-  const mobilePath=mobile.locator('[data-line-drawing] path').nth(3);
+  const mobilePath=mobile.locator('[data-trajectory-sketch] [data-future]');
   await expect.poll(()=>mobilePath.getAttribute('d')).not.toBe(original);
   await expect(mobilePath).toHaveAttribute('d',original!,{timeout:6000});
   await mobile.waitForTimeout(300);await expect(mobilePath).toHaveAttribute('d',original!);

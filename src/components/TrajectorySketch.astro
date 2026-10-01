@@ -1,0 +1,31 @@
+---
+import { trajectory } from '../scripts/trajectory-sketch';
+const initial=trajectory();
+---
+<div class="trajectory-sketch" data-trajectory-sketch>
+  <svg viewBox="0 0 320 190" fill="none" role="img" aria-label="A ball in motion, with a dotted arc projecting where it will land." focusable="false">
+    <path class="ground" d="M24 151H298"/>
+    <path class="past" data-past d={initial.past}/>
+    <path class="future" data-future d={initial.future}/>
+    <path class="launch" data-launch d={initial.launch}/>
+    <circle class="origin" cx="36" cy="145" r="2.5"/>
+    <ellipse class="shadow" data-shadow cx={initial.x} cy="151" rx="7" ry="1.5"/>
+    <path class="landing" data-landing d={initial.landing}/>
+    <circle class="ball" data-ball cx={initial.x} cy={initial.y} r="4.5"/>
+  </svg>
+</div>
+<script>
+  import { initTrajectorySketch } from '../scripts/trajectory-sketch';
+  document.querySelectorAll<HTMLElement>('[data-trajectory-sketch]').forEach(initTrajectorySketch);
+</script>
+<style>
+  .trajectory-sketch{width:280px;max-width:100%;justify-self:center;align-self:center;margin-bottom:64px;color:#30372e;}
+  svg{width:100%;height:auto;overflow:visible;}
+  path{stroke:currentColor;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;}
+  .ground{opacity:.15;}.past{opacity:.26;}.future{stroke-dasharray:2 5;opacity:.6;}
+  .launch{opacity:.65;}.origin{fill:white;stroke:currentColor;stroke-width:1;opacity:.6;}
+  .shadow{fill:currentColor;opacity:.12;}.ball{fill:currentColor;stroke:white;stroke-width:2;}
+  .landing{opacity:.4;}
+  @media(max-width:760px){.trajectory-sketch{width:180px;justify-self:end;margin:-12px 4px 20px 0;}}
+  @media print{.trajectory-sketch{display:none;}}
+</style>
