@@ -1,0 +1,39 @@
+---
+const words=['COLD','CORD','CARD','WARD','WARM'];
+---
+<a class="word-ladder" data-word-ladder href="/research/beyond-local-validity/" aria-label="Word ladder example: COLD to CORD to CARD to WARD to WARM, changing one letter at each step. Read about local edit validity.">
+  <span class="ladder-heading">Word ladder <span>4 edits</span></span>
+  <div class="ladder-steps" aria-hidden="true">
+    {words.map((word,i)=><div class="ladder-step" data-ladder-step data-current={i===4 ? '' : undefined}>
+      <span class="ladder-node"></span>
+      <span class="ladder-word">{[...word].map((letter,j)=><span class:list={{'edited-letter':i>0&&letter!==words[i-1][j]}}>{letter}</span>)}</span>
+      <span class="ladder-role">{i===0?'start':i===4?'goal':''}</span>
+    </div>)}
+  </div>
+  <span class="ladder-caption">Illustrative example <span aria-hidden="true">↗</span></span>
+</a>
+<script>
+  import {initWordLadder} from '../scripts/word-ladder';
+  document.querySelectorAll<HTMLElement>('[data-word-ladder]').forEach(initWordLadder);
+</script>
+<style>
+  .word-ladder{display:block;width:232px;max-width:100%;justify-self:center;align-self:center;margin-bottom:64px;color:var(--ink);}
+  .ladder-heading{display:flex;justify-content:space-between;font-size:11px;font-weight:550;color:var(--muted);}
+  .ladder-heading>span{font-size:10px;font-weight:430;}
+  .ladder-steps{position:relative;margin:19px 0 16px;}
+  .ladder-steps:before{content:'';position:absolute;left:3px;top:15px;bottom:15px;width:1px;background:var(--line);}
+  .ladder-step{display:flex;align-items:center;gap:19px;min-height:31px;position:relative;}
+  .ladder-node{width:7px;height:7px;border:1px solid #969b90;background:white;border-radius:50%;flex-shrink:0;}
+  .ladder-word{display:flex;gap:5px;font-size:18px;font-weight:450;letter-spacing:.02em;line-height:1.4;}
+  .ladder-word>span{width:19px;text-align:center;position:relative;}
+  .edited-letter{font-weight:650;}
+  .edited-letter:after{content:'';position:absolute;bottom:-1px;left:3px;right:3px;height:1px;background:#9a9f94;}
+  .ladder-role{margin-left:auto;font-size:10px;color:var(--muted);}
+  [data-current] .ladder-node{background:var(--ink);border-color:var(--ink);}
+  [data-current] .edited-letter{background:#edf0e9;}
+  .ladder-caption{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);}
+  .ladder-caption>span{font-size:14px;line-height:1;}
+  .word-ladder:hover .ladder-caption,.word-ladder:focus-visible .ladder-caption{color:var(--ink);text-decoration:underline;text-underline-offset:4px;}
+  @media(max-width:760px){.word-ladder{width:210px;justify-self:end;margin:0 4px 24px 0;}.ladder-steps{margin-block:14px;}.ladder-step{min-height:27px;}.ladder-word{font-size:16px;}}
+  @media print{.word-ladder{display:none;}}
+</style>

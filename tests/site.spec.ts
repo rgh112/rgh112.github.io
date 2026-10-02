@@ -1,28 +1,20 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-test('intro drawing responds to a pointer, settles on touch, and respects reduced motion',async({browser})=>{
-  const desktop=await browser.newContext({viewport:{width:1440,height:900}});
-  const page=await desktop.newPage();await page.goto('/');
-  const drawing=page.locator('[data-trajectory-sketch]');
-  const path=drawing.locator('[data-future]');
-  const original=await path.getAttribute('d');
-  const box=(await drawing.boundingBox())!;
-  await page.mouse.move(box.x+box.width*.5,box.y+box.height*.35);
-  await expect.poll(()=>path.getAttribute('d')).not.toBe(original);
-  await page.mouse.move(0,0);await expect(path).toHaveAttribute('d',original!);
+test('word ladder shows valid single-letter edits, finishes, and links to the research',async({page})=>{
+  await page.goto('/');
+  const ladder=page.locator('[data-word-ladder]');
+  const words=await ladder.locator('.ladder-word').allTextContents();
+  expect(words).toEqual(['COLD','CORD','CARD','WARD','WARM']);
+  words.slice(1).forEach((word,i)=>expect([...word].filter((letter,j)=>letter!==words[i][j])).toHaveLength(1));
+  await expect(ladder.locator('[data-current] .ladder-word')).toHaveText('WARM',{timeout:5000});
+  await ladder.hover();
+  await expect(ladder.locator('[data-current] .ladder-word')).toHaveText('COLD');
   await page.emulateMedia({reducedMotion:'reduce'});
-  await page.mouse.move(box.x+box.width*.5,box.y+box.height*.35);
-  await page.waitForTimeout(250);await expect(path).toHaveAttribute('d',original!);
-  await desktop.close();
-  const touch=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
-  const mobile=await touch.newPage();await mobile.goto('/');
-  const mobilePath=mobile.locator('[data-trajectory-sketch] [data-future]');
-  await expect.poll(()=>mobilePath.getAttribute('d')).not.toBe(original);
-  await expect(mobilePath).toHaveAttribute('d',original!,{timeout:6000});
-  await mobile.waitForTimeout(300);await expect(mobilePath).toHaveAttribute('d',original!);
-  expect(await mobile.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
-  await touch.close();
+  await expect(ladder.locator('[data-current] .ladder-word')).toHaveText('WARM');
+  await page.mouse.move(0,0);await ladder.hover();await page.waitForTimeout(800);
+  await expect(ladder.locator('[data-current] .ladder-word')).toHaveText('WARM');
+  await ladder.click();await expect(page).toHaveURL(/research\/beyond-local-validity\//);
 });
 
 test('touch layouts keep controls usable, story text visible, and figure zoom contained',async({browser})=>{
