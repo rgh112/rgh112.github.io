@@ -1,20 +1,23 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-test('word ladder shows valid single-letter edits, finishes, and links to the research',async({page})=>{
+test('word ladder lives on its research page and replays valid single-letter edits',async({page})=>{
   await page.goto('/');
+  await expect(page.locator('[data-word-ladder]')).toHaveCount(0);
+  await page.goto('/research/beyond-local-validity/');
   const ladder=page.locator('[data-word-ladder]');
+  await ladder.scrollIntoViewIfNeeded();
   const words=await ladder.locator('.ladder-word').allTextContents();
   expect(words).toEqual(['COLD','CORD','CARD','WARD','WARM']);
   words.slice(1).forEach((word,i)=>expect([...word].filter((letter,j)=>letter!==words[i][j])).toHaveLength(1));
   await expect(ladder.locator('[data-current] .ladder-word')).toHaveText('WARM',{timeout:5000});
-  await ladder.hover();
+  await ladder.getByRole('button',{name:'Replay edits'}).click();
   await expect(ladder.locator('[data-current] .ladder-word')).toHaveText('COLD');
   await page.emulateMedia({reducedMotion:'reduce'});
   await expect(ladder.locator('[data-current] .ladder-word')).toHaveText('WARM');
   await page.mouse.move(0,0);await ladder.hover();await page.waitForTimeout(800);
   await expect(ladder.locator('[data-current] .ladder-word')).toHaveText('WARM');
-  await ladder.click();await expect(page).toHaveURL(/research\/beyond-local-validity\//);
+  await expect(ladder.getByRole('button',{name:'Replay edits'})).toBeHidden();
 });
 
 test('touch layouts keep controls usable, story text visible, and figure zoom contained',async({browser})=>{

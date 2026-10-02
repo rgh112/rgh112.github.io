@@ -1,7 +1,8 @@
 ---
 const words=['COLD','CORD','CARD','WARD','WARM'];
 ---
-<a class="word-ladder" data-word-ladder href="/research/beyond-local-validity/" aria-label="Word ladder example: COLD to CORD to CARD to WARD to WARM, changing one letter at each step. Read about local edit validity.">
+<figure class="word-ladder" data-word-ladder aria-labelledby="word-ladder-title">
+  <div class="ladder-diagram" role="img" aria-label="COLD to CORD to CARD to WARD to WARM, changing one letter at each step.">
   <span class="ladder-heading">Word ladder <span>4 edits</span></span>
   <div class="ladder-steps" aria-hidden="true">
     {words.map((word,i)=><div class="ladder-step" data-ladder-step data-current={i===4 ? '' : undefined}>
@@ -10,14 +11,21 @@ const words=['COLD','CORD','CARD','WARD','WARM'];
       <span class="ladder-role">{i===0?'start':i===4?'goal':''}</span>
     </div>)}
   </div>
-  <span class="ladder-caption">Illustrative example <span aria-hidden="true">↗</span></span>
-</a>
+  </div>
+  <figcaption class="ladder-caption">
+    <span class="eyebrow">Illustrative example</span>
+    <h3 id="word-ladder-title">One letter at a time</h3>
+    <p>Each step changes one letter and keeps a valid word. This path reaches WARM in four edits.</p>
+    <p>The study asks whether an allowed edit still leaves a route to the goal within the remaining edit budget.</p>
+    <button type="button" class="ladder-replay" data-ladder-replay hidden>Replay edits <span aria-hidden="true">↻</span></button>
+  </figcaption>
+</figure>
 <script>
   import {initWordLadder} from '../scripts/word-ladder';
   document.querySelectorAll<HTMLElement>('[data-word-ladder]').forEach(initWordLadder);
 </script>
 <style>
-  .word-ladder{display:block;width:232px;max-width:100%;justify-self:center;align-self:center;margin-bottom:64px;color:var(--ink);}
+  .word-ladder{display:grid;grid-template-columns:minmax(180px,232px) minmax(0,1fr);align-items:center;gap:48px;padding:28px;margin-top:28px;border:1px solid var(--line);color:var(--ink);}
   .ladder-heading{display:flex;justify-content:space-between;font-size:11px;font-weight:550;color:var(--muted);}
   .ladder-heading>span{font-size:10px;font-weight:430;}
   .ladder-steps{position:relative;margin:19px 0 16px;}
@@ -31,9 +39,11 @@ const words=['COLD','CORD','CARD','WARD','WARM'];
   .ladder-role{margin-left:auto;font-size:10px;color:var(--muted);}
   [data-current] .ladder-node{background:var(--ink);border-color:var(--ink);}
   [data-current] .edited-letter{background:#edf0e9;}
-  .ladder-caption{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);}
-  .ladder-caption>span{font-size:14px;line-height:1;}
-  .word-ladder:hover .ladder-caption,.word-ladder:focus-visible .ladder-caption{color:var(--ink);text-decoration:underline;text-underline-offset:4px;}
-  @media(max-width:760px){.word-ladder{width:210px;justify-self:end;margin:0 4px 24px 0;}.ladder-steps{margin-block:14px;}.ladder-step{min-height:27px;}.ladder-word{font-size:16px;}}
-  @media print{.word-ladder{display:none;}}
+  .ladder-caption .eyebrow{font-size:10px;color:var(--muted);margin-bottom:10px;}
+  .ladder-caption h3{font-size:20px;font-weight:580;letter-spacing:-.02em;line-height:1.35;margin-bottom:12px;}
+  .ladder-caption p{font-size:13px;color:var(--muted);line-height:1.75;margin-top:10px;}
+  .ladder-replay{display:flex;align-items:center;gap:14px;min-height:44px;font-size:12px;margin-top:14px;padding:8px 12px;border:1px solid var(--line);}
+  .ladder-replay:hover{background:var(--wash);}
+  @media(max-width:760px){.word-ladder{grid-template-columns:1fr;gap:16px;padding:22px;}.ladder-diagram{width:232px;max-width:100%;justify-self:center;}}
+  @media print{.word-ladder{break-inside:avoid;}.ladder-replay{display:none;}}
 </style>

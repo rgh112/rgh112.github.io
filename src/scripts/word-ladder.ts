@@ -2,6 +2,8 @@ export function initWordLadder(host:HTMLElement){
   const steps=[...host.querySelectorAll<HTMLElement>('[data-ladder-step]')];
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   const events=new AbortController();
+  const replay=host.querySelector<HTMLButtonElement>('[data-ladder-replay]')!;
+  replay.hidden=reduced.matches;
   let timer:ReturnType<typeof setTimeout>|undefined;
   let visible=false,started=false,current=4;
   function show(index:number){current=index;steps.forEach((step,i)=>step.toggleAttribute('data-current',i===index));}
@@ -20,8 +22,8 @@ export function initWordLadder(host:HTMLElement){
     if(!started){started=true;play();}
   });observer.observe(host);
   host.addEventListener('pointerenter',event=>{if(event.pointerType==='mouse')play();},{signal:events.signal});
-  host.addEventListener('focus',play,{signal:events.signal});
-  reduced.addEventListener('change',stop,{signal:events.signal});
+  replay.addEventListener('click',()=>{stop();play();},{signal:events.signal});
+  reduced.addEventListener('change',()=>{stop();replay.hidden=reduced.matches;},{signal:events.signal});
   document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();},{signal:events.signal});
   window.addEventListener('pagehide',event=>{if(!event.persisted){stop();observer.disconnect();events.abort();}},{signal:events.signal});
 }
