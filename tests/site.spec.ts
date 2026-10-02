@@ -1,6 +1,66 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
+test('research examples explain each process, remain usable on mobile, and keep controls in sync',async({page})=>{
+  await page.setViewportSize({width:320,height:780});
+  const cases=[
+    ['ood-resolution','checkpoints',3],['autometa','extraction',4],['clinician-trust','verification',4],
+    ['moral-profile-dynamics','memory',4],['norm-dynamics','configurations',3],['counting-pixels','pixels',3],
+  ] as const;
+  for(const [slug,kind,count] of cases){
+    await page.goto(`/research/${slug}/`);
+    const example=page.locator(`[data-research-example="${kind}"]`);
+    await example.scrollIntoViewIfNeeded();
+    await expect(example).toBeVisible();await expect(example.locator('.example-note')).not.toBeEmpty();
+    const buttons=example.locator('[data-example-step]');await expect(buttons).toHaveCount(count);
+    const fixedAnswer=kind==='verification'?await example.locator('.answer-record').innerText():'';
+    for(let i=0;i<count;i++){
+      await buttons.nth(i).click();await expect(example).toHaveAttribute('data-stage',String(i));
+      await expect(example.locator('[data-example-step][aria-pressed=true]')).toHaveCount(1);
+      await expect(buttons.nth(i)).toHaveAttribute('aria-pressed','true');
+      expect((await buttons.nth(i).boundingBox())!.height).toBeGreaterThanOrEqual(44);
+      await expect(example.locator('.example-explanation p:visible')).toHaveCount(1);
+      expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),slug).toBe(true);
+      if(kind==='checkpoints'){
+        expect(await example.locator('.em-score').allTextContents()).toEqual(['0 / 4','0 / 4','0 / 4']);
+        if(i===1)await expect(example.locator('.latest-checkpoint')).toContainText('-1.6');
+        if(i===2)await expect(example.locator('.visual-footnote')).toContainText('Latest among tied checkpoints: C');
+      }
+      if(kind==='extraction'){
+        await expect(example.locator('.source-quote')).toHaveText('Follow-up: 30 days');
+        await expect(example.locator(i<2?'.disputed-value':'.corrected-value')).toBeVisible();
+        expect(await example.locator('.pool-handoff').isVisible()).toBe(i===3);
+      }
+      if(kind==='verification')expect(await example.locator('.answer-record').innerText()).toBe(fixedAnswer);
+      if(kind==='memory')await expect(example.locator('.agent-card')).toHaveCount(4);
+      if(kind==='configurations'){
+        const selected=await example.locator('.matrix-cell').evaluateAll(cells=>cells.filter(cell=>getComputedStyle(cell).backgroundColor==='rgb(237, 240, 233)').length);
+        expect(selected).toBe([1,4,15][i]);
+      }
+      if(kind==='pixels'){
+        expect(await example.locator('g.pixel-counts').isVisible()).toBe(i>0);
+        if(i===2){
+          expect(await example.locator('.strong-count').allTextContents()).toEqual(['10','8']);
+          expect(await example.locator('.axis-pixel').first().evaluate(el=>getComputedStyle(el).strokeWidth)).toBe('2px');
+        }
+      }
+    }
+    await buttons.first().click();await expect(example).toHaveAttribute('data-stage','0');
+    const audit=await new AxeBuilder({page}).include('[data-research-example]').withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();
+    expect(audit.violations,slug).toEqual([]);
+  }
+  await page.goto('/');await expect(page.locator('[data-research-example]')).toHaveCount(0);
+});
+
+test('research example stages remain readable without JavaScript',async({browser})=>{
+  const context=await browser.newContext({javaScriptEnabled:false});
+  const page=await context.newPage();await page.goto('/research/autometa/');
+  await expect(page.locator('.example-controls')).toBeHidden();
+  await expect(page.locator('.example-static-steps')).toBeVisible();
+  await expect(page.locator('.example-static-steps')).toContainText('separate statistical module');
+  await context.close();
+});
+
 test('word ladder lives on its research page and replays valid single-letter edits',async({page})=>{
   await page.goto('/');
   await expect(page.locator('[data-word-ladder]')).toHaveCount(0);

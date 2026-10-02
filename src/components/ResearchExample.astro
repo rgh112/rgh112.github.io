@@ -1,0 +1,136 @@
+---
+import type {ResearchExample} from '../data/research-examples';
+interface Props { example:ResearchExample; }
+const {example:e}=Astro.props;
+const id=`example-${e.kind}`;
+const candidate=(row:number,col:number)=>(row===8&&col>=1&&col<=10)||(col===1&&row>=1&&row<=8)||(row===2&&col===8)||(row===4&&col===10);
+const axis=(row:number,col:number)=>(row===8&&col>=1&&col<=10)||(col===1&&row>=1&&row<=8);
+const plotted=(row:number,col:number)=>[[7,3],[6,4],[6,5],[5,6],[4,7],[3,8],[2,9]].some(([r,c])=>row===r&&col===c);
+const rowCounts=Array.from({length:10},(_,r)=>Array.from({length:12},(_,c)=>candidate(r,c)).filter(Boolean).length);
+const colCounts=Array.from({length:12},(_,c)=>Array.from({length:10},(_,r)=>candidate(r,c)).filter(Boolean).length);
+---
+<figure class="research-example" data-research-example={e.kind} data-stage="0" aria-labelledby={`${id}-title`}>
+  <header><span class="eyebrow">Illustrative example</span><h3 id={`${id}-title`}>{e.title}</h3></header>
+  <div class="example-visual" role="img" aria-label={e.description}>
+    <div aria-hidden="true">
+    {e.kind==='checkpoints' && <div class="checkpoint-table">
+      <div class="checkpoint-row column-headings"><span>Checkpoint</span><span>Exact match</span><span>Target log prob.</span></div>
+      {['A','B','C'].map((name,i)=><div class:list={['checkpoint-row',{'latest-checkpoint':i===2}]}>
+        <span><b>{name}</b><small>{['Early','Middle','Latest'][i]}</small></span><span class="em-score">0 / 4</span>
+        <span><span data-example-view="0">—</span><span data-example-view="1 2" hidden>{[-2.8,-2.1,-1.6][i].toFixed(1)}</span></span>
+      </div>)}
+      <p class="visual-footnote"><span data-example-view="0">Exact-match tie: A = B = C</span><span data-example-view="1" hidden>Highest target likelihood: C</span><span data-example-view="2" hidden>Latest among tied checkpoints: C</span></p>
+    </div>}
+    {e.kind==='extraction' && <div class="record-flow">
+      <div class="source-record"><span class="record-label">Study A · page 4</span><div class="document-lines"><i></i><i></i></div><p class="source-quote">Follow-up: <b>30 days</b></p><div class="document-lines"><i></i></div></div>
+      <span class="flow-arrow">→</span>
+      <div class="extracted-record"><span class="record-label">Structured entry</span><dl><dt>Source</dt><dd>Study A · p. 4</dd><dt>Follow-up</dt><dd><span class="disputed-value" data-example-view="0 1">12 months</span><span class="corrected-value" data-example-view="2 3" hidden>30 days</span></dd></dl>
+        <span class="record-status" data-example-view="0">Extracted</span><span class="record-status" data-example-view="1" hidden>Mismatch flagged</span><span class="record-status" data-example-view="2 3" hidden>Entry corrected ✓</span>
+      </div>
+      <div class="pool-handoff" data-example-view="3" hidden><span>Checked study data</span><span>→</span><b>Statistical module</b></div>
+    </div>}
+    {e.kind==='verification' && <div class="verification-scene">
+      <div class="answer-record"><span class="record-label">AI answer · held fixed</span><p>The conclusion applies to <b class="claim-group">group B</b>.</p></div>
+      <div class="evidence-record"><span class="record-label">Supporting source</span><p data-example-view="0">Citation available <span class="muted">↗</span></p><p data-example-view="1 2 3" hidden>Participants: <b>group A</b></p></div>
+      <div class="reader-note"><span data-example-view="0">Read the claim</span><span data-example-view="1" hidden>Inspect the population described</span><span data-example-view="2" hidden>A → B: is this extension supported?</span><span data-example-view="3" hidden>Defer judgment · more evidence needed</span></div>
+    </div>}
+    {e.kind==='memory' && <div class="memory-scene">
+      <div class="shared-task"><span class="record-label">Shared kitchen</span><p data-example-view="0 1">The kitchen needs cleaning.</p><p data-example-view="2" hidden>Kitchen cleaned. Round recorded.</p><p data-example-view="3" hidden>Next task: restock shared supplies.</p></div>
+      <div class="agent-cards">{['A','B','C','D'].map((name,i)=><div class="agent-card"><span class="agent-token">{name}</span><span data-example-view="0">Own profile</span><span data-example-view="1" hidden>{['Clean','Propose rota','Continue task','Help clean'][i]}</span><span data-example-view="2" hidden>{['Cleaned','Proposed rota','Continued task','Helped clean'][i]}</span><span data-example-view="3" hidden>Next decision<small>Recalls: {['cleaned','proposed rota','continued task','helped clean'][i]}</small></span></div>)}</div>
+      <div class="memory-return"><span data-example-view="0">Same observation · individual context</span><span data-example-view="1" hidden>Different actions · one shared environment</span><span data-example-view="2" hidden>Store experience + contribution feedback</span><span data-example-view="3" hidden>Profile + memory + feedback → decision</span></div>
+    </div>}
+    {e.kind==='configurations' && <div class="configuration-scene">
+      <div class="matrix"><span></span>{['R1','R2','R3','R4'].map(rule=><span class="matrix-label">{rule}</span>)}
+        {Array.from({length:15},(_,row)=><><span class="matrix-label group-label">G{row+1}</span>{Array.from({length:4},(_,col)=><span class:list={['matrix-cell',{'chosen-group':row===7,'chosen-rule':col===1}]}><i></i></span>)}</>)}
+      </div>
+      <p class="matrix-key"><span data-example-view="0">G8 + R2</span><span data-example-view="1" hidden>G8 · four rule regimes</span><span data-example-view="2" hidden>R2 · 15 group compositions</span></p>
+    </div>}
+    {e.kind==='pixels' && <div class="pixel-scene">
+      <svg viewBox="0 0 300 260" fill="none" focusable="false">
+        <text x="266" y="20" class="count-label pixel-counts" text-anchor="middle">Row</text>
+        {Array.from({length:10},(_,row)=>Array.from({length:12},(_,col)=><rect x={24+col*18} y={30+row*18} width="15" height="15" rx="1" class:list={['example-pixel',{'candidate-pixel':candidate(row,col),'axis-pixel':axis(row,col),'plot-pixel':plotted(row,col)}]}/>))}
+        <g class="pixel-counts">{rowCounts.map((count,row)=><text x="266" y={41+row*18} text-anchor="middle" class:list={['pixel-count',{'strong-count':row===8}]}>{count}</text>)}
+          {colCounts.map((count,col)=><text x={31.5+col*18} y="233" text-anchor="middle" class:list={['pixel-count',{'strong-count':col===1}]}>{count}</text>)}
+          <text x="128" y="253" text-anchor="middle" class="count-label">Column counts</text>
+        </g>
+      </svg>
+    </div>}
+    </div>
+  </div>
+  <figcaption>
+    <div class="example-controls" role="group" aria-label={`${e.title}: explanation stages`} hidden>{e.steps.map((step,i)=><button type="button" data-example-step={i} aria-pressed={i===0} aria-controls={`${id}-explanation`}>{step.label}</button>)}</div>
+    <div class="example-explanation" id={`${id}-explanation`} aria-live="polite" aria-atomic="true">{e.steps.map((step,i)=><p data-example-view={String(i)} hidden={i!==0}>{step.text}</p>)}</div>
+    <p class="example-note">{e.note}</p>
+    <noscript><ol class="example-static-steps">{e.steps.slice(1).map(step=><li><b>{step.label}.</b> {step.text}</li>)}</ol></noscript>
+  </figcaption>
+</figure>
+<script>
+  import {initResearchExamples} from '../scripts/research-examples';
+  initResearchExamples();
+</script>
+<style>
+  .research-example{margin-top:28px;border:1px solid var(--line);padding:28px;color:var(--ink);}
+  header .eyebrow{font-size:10px;color:var(--muted);margin-bottom:10px;}
+  header h3{font-size:21px;font-weight:580;letter-spacing:-.02em;line-height:1.35;}
+  .example-visual{padding:28px 0;max-width:620px;margin-inline:auto;}
+  .example-controls{display:flex;flex-wrap:wrap;gap:8px;padding-top:20px;border-top:1px solid var(--line);}
+  .example-controls button{min-height:44px;padding:10px 14px;border:1px solid var(--line);font-size:12px;line-height:1.4;}
+  .example-controls button[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:white;}
+  .example-controls button:hover{border-color:var(--ink);}
+  .example-explanation{font-size:13px;line-height:1.75;color:var(--muted);margin-top:18px;min-height:3.5em;}
+  .example-note{font-size:11px;line-height:1.7;color:var(--muted);margin-top:14px;}
+  .example-static-steps{font-size:13px;line-height:1.75;padding-left:20px;}
+  .example-static-steps li{margin-top:12px;}
+  .record-label{display:block;font-size:10px;color:var(--muted);margin-bottom:12px;}
+  .checkpoint-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;align-items:center;padding:15px 10px;border-bottom:1px solid var(--line);font-size:15px;font-variant-numeric:tabular-nums;}
+  .checkpoint-row>span:not(:first-child){text-align:center;}
+  .column-headings{font-size:11px;color:var(--muted);padding-top:0;}
+  .checkpoint-row small{display:block;font-size:10px;margin-top:5px;color:var(--muted);}
+  .visual-footnote{font-size:12px;text-align:center;padding-top:18px;min-height:3.5em;}
+  [data-stage="1"] .latest-checkpoint>span:last-child,[data-stage="2"] .latest-checkpoint>span:first-child{font-weight:700;background:var(--wash);outline:1px solid var(--line);padding:7px;}
+  .record-flow{display:grid;grid-template-columns:minmax(0,1fr) 20px minmax(0,1fr);align-items:center;gap:14px;}
+  .source-record,.extracted-record,.answer-record,.evidence-record{border:1px solid var(--line);padding:18px;min-width:0;}
+  .source-record{align-self:stretch;}
+  .document-lines{display:grid;gap:8px;}.document-lines i{height:2px;background:var(--line);}.document-lines i:last-child{width:70%;}
+  .source-quote{font-size:14px;margin:17px 0;}.flow-arrow{text-align:center;}
+  dl{display:grid;grid-template-columns:auto 1fr;gap:12px;font-size:12px;margin:0;line-height:1.5;}dd{margin:0;font-weight:550;}
+  .record-status{display:block;font-size:10px;margin-top:17px;color:var(--muted);}
+  [data-stage="1"] .disputed-value{border-bottom:2px dashed var(--ink);}
+  [data-stage="1"] .source-quote b,.corrected-value{background:#edf0e9;}
+  .pool-handoff{grid-column:1/-1;display:flex;justify-content:center;align-items:center;gap:14px;font-size:12px;padding:18px 12px;background:var(--wash);}
+  .verification-scene{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .verification-scene p{font-size:14px;}
+  .reader-note{grid-column:1/-1;padding:16px;background:var(--wash);font-size:12px;line-height:1.7;text-align:center;}
+  [data-stage="2"] .claim-group,[data-stage="3"] .claim-group{border-bottom:2px dashed var(--ink);}
+  [data-stage="2"] .evidence-record b,[data-stage="3"] .evidence-record b{background:#edf0e9;}
+  .shared-task{border:1px solid var(--line);padding:16px;text-align:center;}.shared-task .record-label{margin-bottom:5px;}.shared-task p{font-size:14px;}
+  .agent-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:22px 0;}
+  .agent-card{display:flex;flex-direction:column;align-items:center;gap:12px;font-size:11px;text-align:center;line-height:1.5;}
+  .agent-card small{display:block;font-size:10px;line-height:1.6;color:var(--muted);margin-top:6px;}
+  .agent-token{border:1px solid var(--line);width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:13px;}
+  [data-stage="1"] .agent-token{background:var(--ink);color:white;border-color:var(--ink);}
+  .memory-return{background:var(--wash);padding:14px;text-align:center;font-size:12px;line-height:1.7;}
+  .matrix{max-width:340px;margin-inline:auto;display:grid;grid-template-columns:42px repeat(4,1fr);gap:3px 10px;}
+  .matrix-label{font-size:11px;text-align:center;padding:4px;line-height:1.1;}.group-label{text-align:right;font-size:10px;}
+  .matrix-cell{display:grid;place-items:center;border:1px solid #e5e7e1;min-height:18px;}.matrix-cell i{width:5px;height:5px;border:1px solid #73796b;border-radius:50%;}
+  [data-stage="0"] .chosen-group.chosen-rule,[data-stage="1"] .chosen-group,[data-stage="2"] .chosen-rule{background:#edf0e9;border-color:#73796b;}
+  [data-stage="0"] .chosen-group.chosen-rule i,[data-stage="1"] .chosen-group i,[data-stage="2"] .chosen-rule i{background:var(--ink);border-color:var(--ink);}
+  .matrix-key{text-align:center;font-size:12px;line-height:1.6;margin-top:20px;}
+  .pixel-scene{max-width:340px;margin-inline:auto;}.pixel-scene svg{width:100%;height:auto;}
+  .example-pixel{fill:#f0f2ed;stroke:#e1e4da;stroke-width:.5;}.plot-pixel{fill:#aeb7a2;}.candidate-pixel{fill:#30372e;}
+  [data-stage="1"] .plot-pixel,[data-stage="2"] .plot-pixel{fill:#f0f2ed;}
+  [data-stage="2"] .candidate-pixel:not(.axis-pixel){fill:#aeb7a2;}
+  [data-stage="2"] .axis-pixel{stroke:#30372e;stroke-width:2;}
+  .pixel-count,.count-label{font-family:var(--sans);font-size:11px;fill:var(--muted);}.strong-count{font-weight:700;fill:var(--ink);}.count-label{font-size:10px;}
+  [data-stage="0"] .pixel-counts{display:none;}
+  @media(max-width:760px){
+    .research-example{padding:22px 18px;}header h3{font-size:20px;}
+    .example-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}.example-controls button{padding:10px 8px;}
+    .example-explanation{min-height:0;}
+    .record-flow{grid-template-columns:1fr;gap:10px;}.flow-arrow{transform:rotate(90deg);}.source-record,.extracted-record{padding:16px;}
+    .pool-handoff{flex-wrap:wrap;gap:10px;}.verification-scene{grid-template-columns:1fr;}
+    .agent-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;}
+    .checkpoint-row{gap:8px;padding:14px 4px;font-size:14px;}.column-headings{font-size:10px;}.matrix{gap:3px 6px;grid-template-columns:32px repeat(4,1fr);}
+  }
+  @media print{.example-controls{display:none;}.research-example{break-inside:avoid;}}
+</style>

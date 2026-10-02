@@ -4,6 +4,8 @@ import Diagram from '../../components/Diagram.astro';
 import WuxiaPractice from '../../components/WuxiaPractice.astro';
 import PaperFigure from '../../components/PaperFigure.astro';
 import WordLadder from '../../components/WordLadder.astro';
+import ResearchExample from '../../components/ResearchExample.astro';
+import { researchExamples } from '../../data/research-examples';
 import { paperFigures } from '../../data/paper-figures';
 import { papers } from '../../data/papers';
 export function getStaticPaths() { return papers.map(paper=>({params:{slug:paper.slug},props:{paper}})); }
@@ -21,6 +23,7 @@ const next = papers[(papers.findIndex(p=>p.slug===paper.slug)+1)%papers.length];
         {paper.origin && <section id="origin" class:list={['origin-note', {'origin-wuxia':paper.slug==='ood-resolution'}]}><div class="origin-copy"><span class="eyebrow">{paper.originLabel}</span><p>{paper.origin}</p></div>{paper.slug==='ood-resolution' && <WuxiaPractice />}</section>}
         <section id="approach" class="prose-section"><span class="eyebrow">01 / The approach</span><h2>Study design</h2><p>{paper.method}</p></section>
         {paper.slug==='beyond-local-validity' && <WordLadder />}
+        {researchExamples[paper.slug] && <ResearchExample example={researchExamples[paper.slug]} />}
         {sourceFigure?.placement==='approach' && <PaperFigure figure={sourceFigure} />}
         <section id="finding" class="prose-section"><span class="eyebrow">02 / What we found</span><h2>Findings</h2><p>{paper.finding}</p></section>
         {sourceFigure?.placement==='finding' && <PaperFigure figure={sourceFigure} />}
