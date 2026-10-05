@@ -1,0 +1,6 @@
+---
+interface Props { authors:string; }
+const {authors}=Astro.props;
+---
+<span class="author-list">{authors.split(/(Kunhee Ryu)/).map(name=>name==='Kunhee Ryu'?<strong>{name}</strong>:name)}</span>
+<style>.author-list strong{font-weight:600;}</style>

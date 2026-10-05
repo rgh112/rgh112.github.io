@@ -115,7 +115,50 @@ test('touch layouts keep controls usable, story text visible, and figure zoom co
   }
 });
 
-const pages = ['/', '/research/', '/directions/', '/about/', '/cv/', '/research/beyond-local-validity/', '/research/ood-resolution/', '/research/autometa/', '/research/clinician-trust/', '/research/moral-profile-dynamics/', '/research/norm-dynamics/', '/research/counting-pixels/'];
+const pages = ['/', '/research/', '/directions/', '/about/', '/cv/', '/research/partner-choice/', '/research/lessons-peer-review/', '/research/beyond-local-validity/', '/research/ood-resolution/', '/research/autometa/', '/research/clinician-trust/', '/research/moral-profile-dynamics/', '/research/norm-dynamics/', '/research/counting-pixels/'];
+
+test('social simulation papers retain workshop status, oral acceptance, and ordered authors everywhere',async({page})=>{
+  await page.setViewportSize({width:390,height:844});
+  await page.goto('/research/');
+  await expect(page.locator('.paper-card')).toHaveCount(9);
+  await expect(page.locator('.paper-card .paper-authors')).toHaveCount(9);
+  for(const authors of await page.locator('.paper-card .paper-authors').all())await expect(authors).toContainText('Kunhee Ryu');
+  await page.getByRole('button',{name:'Social simulation',exact:true}).click();
+  await expect(page.locator('.paper-card:visible')).toHaveCount(4);
+  const cases=[['partner-choice','Kunhee Ryu and Keeheon Lee'],['lessons-peer-review','Jihye Oh, Kunhee Ryu, and Keeheon Lee']];
+  for(const [slug,authors] of cases){
+    const card=page.locator('.paper-card').filter({has:page.locator(`h3 a[href="/research/${slug}/"]`)});
+    await expect(card.locator('.paper-authors')).toHaveText(authors);
+    await expect(card.locator('.paper-meta')).toContainText('CIKM 2026');
+    await expect(card.locator('.status')).toHaveText(['Accepted','Oral']);
+  }
+  await page.goto('/cv/');
+  const workshops=page.locator('.cv-section').filter({has:page.getByRole('heading',{name:'Workshop papers',exact:true})});
+  await expect(workshops.locator('.cv-publication')).toHaveCount(4);
+  for(const [slug,authors] of cases){
+    const entry=workshops.locator('.cv-publication').filter({has:page.locator(`a[href="/research/${slug}/"]`)});
+    await expect(entry).toContainText(authors);await expect(entry).toContainText('Accepted · Oral');
+  }
+  for(const [slug,authors] of cases){
+    await page.goto(`/research/${slug}/`);
+    await expect(page.locator('.detail-authors')).toHaveText(authors);
+    await expect(page.locator('.detail-head .status')).toHaveText(['Accepted','Oral']);
+    await expect(page.locator('#publication')).toContainText(authors);
+    await expect(page.locator('#publication')).toContainText('Accepted · Oral');
+    await expect(page.locator('.detail-figure svg')).toBeVisible();
+    await expect(page.locator('a[href$=".pdf"]')).toHaveCount(0);
+    await expect(page.locator('#publication pre')).toContainText('Accepted for oral presentation');
+    expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+    const audit=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();
+    expect(audit.violations).toEqual([]);
+  }
+  await page.goto('/');
+  await expect(page.locator('.social-research li')).toHaveCount(4);
+  await expect(page.locator('[data-network], [data-word-ladder], [data-trajectory-sketch]')).toHaveCount(0);
+  await page.goto('/directions/');
+  await expect(page.locator('.agenda-map a')).toHaveCount(4);
+  await expect(page.locator('#social h2')).toHaveText('Social simulation');
+});
 
 test('all pages render, internal links resolve, and public text excludes private material', async ({page, request}) => {
   const links = new Set<string>();
@@ -141,7 +184,7 @@ test('topic filter, search, empty state, and reset work together', async ({page}
   await page.getByRole('searchbox').fill('no-such-paper');
   await expect(page.getByText('No matching research.')).toBeVisible();
   await page.getByRole('button',{name:'Clear filters'}).click();
-  await expect(page.locator('.paper-card:visible')).toHaveCount(7);
+  await expect(page.locator('.paper-card:visible')).toHaveCount(9);
   await page.getByRole('searchbox').fill('clinician');
   await expect(page.locator('.paper-card:visible')).toHaveCount(1);
 });
@@ -196,8 +239,8 @@ test('reduced motion and disabled JavaScript preserve the content',async({browse
   await nojs.close();
 });
 
-test('every paper has a readable source figure and an accessible zoom viewer', async ({page}) => {
-  for(const path of pages.filter(path=>/^\/research\/.+\/$/.test(path))){
+test('published source figures remain readable with an accessible zoom viewer', async ({page}) => {
+  for(const path of pages.filter(path=>/^\/research\/.+\/$/.test(path)&&!['/research/partner-choice/','/research/lessons-peer-review/'].includes(path))){
     await page.goto(path);
     const figure=page.locator('.paper-source-figure');
     await expect(figure).toHaveCount(1);

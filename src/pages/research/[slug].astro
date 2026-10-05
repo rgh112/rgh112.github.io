@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Authors from '../../components/Authors.astro';
 import Diagram from '../../components/Diagram.astro';
 import WuxiaPractice from '../../components/WuxiaPractice.astro';
 import PaperFigure from '../../components/PaperFigure.astro';
@@ -16,7 +17,7 @@ const next = papers[(papers.findIndex(p=>p.slug===paper.slug)+1)%papers.length];
 <Layout title={paper.short} description={paper.summary}>
   <article class="paper-detail wrap">
     <a class="back-link" href="/research/">← All research</a>
-    <header class="detail-head"><div class="paper-meta"><span>{paper.venue}</span><span class="status">{paper.status}</span></div><h1>{paper.question}</h1><p class="detail-summary">{paper.summary}</p><div class="detail-byline"><span>{paper.role}</span><span>{paper.category}</span></div></header>
+    <header class="detail-head"><div class="paper-meta"><span>{paper.venue}</span><span class="status">{paper.status}</span>{paper.presentation && <span class="status">{paper.presentation}</span>}</div><h1>{paper.question}</h1><p class="detail-authors"><Authors authors={paper.authors}/></p><p class="detail-summary">{paper.summary}</p><div class="detail-byline"><span>{paper.role}</span><span>{paper.category}</span></div></header>
     <div class="detail-grid"><aside class="detail-sidebar"><span class="eyebrow">In this research</span><nav aria-label="On this page">{paper.origin && <a href="#origin">The starting point</a>}<a href="#approach">The approach</a><a href="#finding">What we found</a><a href="#scope">Scope & limitations</a><a href="#next">The next question</a><a href="#publication">Publication</a></nav></aside>
       <div class="detail-body">
         <figure class="detail-figure"><Diagram kind={paper.diagram} interactive /></figure>
@@ -29,7 +30,7 @@ const next = papers[(papers.findIndex(p=>p.slug===paper.slug)+1)%papers.length];
         {sourceFigure?.placement==='finding' && <PaperFigure figure={sourceFigure} />}
         <section id="scope" class="scope-note"><span class="eyebrow">Scope & limitations</span><p>{paper.limitation}</p></section>
         <section id="next" class="next-question"><span class="eyebrow">Further questions</span><h2>{paper.next}</h2><a href="/directions/" class="text-link">Research directions <span aria-hidden="true">↗</span></a></section>
-        <section id="publication" class="publication-box"><span class="eyebrow">Publication details</span><h2>{paper.title}</h2><p>{paper.authors}</p><p>{paper.venue} · {paper.status}</p><div class="publication-links">{paper.doi && <a class="button" href={`https://doi.org/${paper.doi}`} target="_blank" rel="noopener noreferrer">Read the paper ↗</a>}{paper.external && <a class="button" href={paper.external} target="_blank" rel="noopener noreferrer">Workshop paper ↗</a>}{paper.code && <a class="button" href={paper.code} target="_blank" rel="noopener noreferrer">Code & materials ↗</a>}<button class="button copy-citation" data-citation={paper.citation}>Copy citation</button></div><p class="copy-status sr-only" aria-live="polite"></p><details><summary>BibTeX citation</summary><pre>{paper.citation}</pre></details></section>
+        <section id="publication" class="publication-box"><span class="eyebrow">Publication details</span><h2>{paper.title}</h2><p><Authors authors={paper.authors}/></p><p>{paper.venue} · {paper.status}{paper.presentation && ` · ${paper.presentation}`}</p><div class="publication-links">{paper.venueUrl && <a class="button" href={paper.venueUrl} target="_blank" rel="noopener noreferrer">Workshop website ↗</a>}{paper.doi && <a class="button" href={`https://doi.org/${paper.doi}`} target="_blank" rel="noopener noreferrer">Read the paper ↗</a>}{paper.external && <a class="button" href={paper.external} target="_blank" rel="noopener noreferrer">Workshop paper ↗</a>}{paper.code && <a class="button" href={paper.code} target="_blank" rel="noopener noreferrer">Code & materials ↗</a>}<button class="button copy-citation" data-citation={paper.citation}>Copy citation</button></div><p class="copy-status sr-only" aria-live="polite"></p><details><summary>BibTeX citation</summary><pre>{paper.citation}</pre></details></section>
       </div>
     </div>
   </article>

@@ -1,7 +1,8 @@
 export type Paper = {
   slug: string; title: string; short: string; year: number; venue: string;
-  category: 'Agents & planning' | 'Learning & evaluation' | 'Human–AI interaction' | 'Multi-agent systems' | 'Information extraction';
+  category: 'Agents & planning' | 'Learning & evaluation' | 'Human–AI interaction' | 'Multi-agent systems' | 'Social simulation' | 'Information extraction';
   status: 'Accepted' | 'Published' | 'Workshop'; authors: string; question: string;
+  workshop?: boolean; presentation?: 'Oral'; venueUrl?: string;
   summary: string; role: string; doi?: string; code?: string; external?: string;
   origin?: string; originLabel?: string; method: string; finding: string; limitation: string;
   next: string; diagram: string; citation: string;
@@ -9,6 +10,34 @@ export type Paper = {
 
 // Deliberate public allowlist. Never import or glob the private manuscript folder.
 export const papers: Paper[] = [
+  {
+    slug: 'partner-choice', title: 'Who Do Agents Choose Again? Partner Choice in a Heterogeneous Agent Society',
+    short: 'Repeated partner choice in an agent society', year: 2026, venue: 'CIKM 2026 · LASS Workshop',
+    category: 'Social simulation', status: 'Accepted', workshop: true, presentation: 'Oral',
+    authors: 'Kunhee Ryu and Keeheon Lee', role: 'First author', venueUrl: 'https://lassworkshop26.github.io/',
+    question: 'Why do agents return to the same collaborator?',
+    summary: 'A cooking simulation tracks whom agents wait for, ask for help, and work with across repeated encounters, while checking the role of available choices and menu order.',
+    method: 'Ten participants—eight language agents and two reactive rule agents—share a cooking project over twelve simulated days. Five paired repetitions vary access to retrieved personal events and previous plans. We identify frequently chosen partners during days 1–6, then examine later choices during days 7–12 against references based on candidate availability and menu position. Messages, accepted requests, and executed work are traced separately.',
+    finding: 'Early waiting targets receive 46.9% of later waits in the principal cohort, compared with 11.8% under uniform choice over recorded candidates and 45.5% under a position reference estimated from other runs. Partner choice persists, but the position reference closely reproduces the waiting pattern. Work requests provide a smaller, sparser signal. Recorded cases connect repeated requests to executed assistance, and frequently chosen targets often differ from frequent co-contributors.',
+    limitation: 'Names, menu positions, and retained experience are intertwined. Five paired repetitions in one workflow establish a descriptive pattern, while preference for particular individuals remains unresolved. The memory comparison changes event retrieval and plan carryover together. The environment has not been validated as a model of human preferences.',
+    next: 'If menu order and displayed names change independently, do agents still return to the same collaborator?',
+    diagram: 'partners',
+    citation: '@misc{ryu2026partnerchoice,\n  title={Who Do Agents Choose Again? Partner Choice in a Heterogeneous Agent Society},\n  author={Ryu, Kunhee and Lee, Keeheon},\n  year={2026},\n  note={Accepted for oral presentation at the 2nd Workshop on LLM Agents for Social Simulation (LASS), CIKM 2026}\n}',
+  },
+  {
+    slug: 'lessons-peer-review', title: 'Lessons, Peer Review, and Racing: A Controlled Pilot of Small-Model Programming Agents',
+    short: 'Lessons and peer review in programming agents', year: 2026, venue: 'CIKM 2026 · LASS Workshop',
+    category: 'Social simulation', status: 'Accepted', workshop: true, presentation: 'Oral',
+    authors: 'Jihye Oh, Kunhee Ryu, and Keeheon Lee', role: 'Second author', venueUrl: 'https://lassworkshop26.github.io/',
+    question: 'What changes when programming agents receive lessons or review a peer’s work?',
+    summary: 'A controlled pilot separates instructional context, model size, peer review, and answer-selection policy in artificial programming students.',
+    method: 'Ministral models with 3B, 8B, and 14B parameters receive fixed Python lesson packages or no lesson. Across 48 selected programming tasks, the study compares individual generation, self-review, independent revision, peer review, and racing. Public tests select an answer; hidden tests assess it afterward. The pilot comprises 1,776 task–condition executions and 4,940 API calls. Model weights remain fixed.',
+    finding: 'Peer review adds zero to three correct selections per composition relative to independent revision, with all six exploratory intervals including zero. Revision diagnostics show fewer correct drafts lost under peer review. Racing reduces median selection latency in all six compositions, but mean API cost rises in five: most requests are already in flight when selection ends.',
+    limitation: 'This is an exploratory pilot on a filtered set of 48 tasks, with one sampling schedule per condition. Lessons differ in length, and equal call counts do not imply equal monetary budgets. Artificial students do not accumulate experience across tasks. The study does not validate classroom learning or establish a general advantage of heterogeneous teams.',
+    next: 'When does peer information improve a final answer beyond independent revision, and when do faster selection policies actually save computation?',
+    diagram: 'peer-review',
+    citation: '@misc{oh2026lessons,\n  title={Lessons, Peer Review, and Racing: A Controlled Pilot of Small-Model Programming Agents},\n  author={Oh, Jihye and Ryu, Kunhee and Lee, Keeheon},\n  year={2026},\n  note={Accepted for oral presentation at the 2nd Workshop on LLM Agents for Social Simulation (LASS), CIKM 2026}\n}',
+  },
   {
     slug: 'beyond-local-validity', title: 'Evaluating LLM Agents Beyond Local Edit Validity',
     short: 'Local validity and goal reachability', year: 2026, venue: 'Findings of EMNLP 2026',
@@ -72,7 +101,7 @@ export const papers: Paper[] = [
   {
     slug: 'moral-profile-dynamics', title: 'Manners Maketh MAN: Moral-Profile Diversity and Cooperative Dynamics in LLM-Based Multi-Agent Simulation',
     short: 'Cooperation among agents with different priorities', year: 2026, venue: 'AAMAS 2026 · ASI Workshop',
-    category: 'Multi-agent systems', status: 'Workshop', authors: 'Keeheon Lee, Kunhee Ryu, and Hogyun Yoo',
+    category: 'Social simulation', status: 'Workshop', authors: 'Keeheon Lee, Kunhee Ryu, and Hogyun Yoo',
     question: 'How do different moral priorities affect cooperation among artificial agents?',
     summary: 'A shared-space simulation studies the interaction of moral profiles, episodic memory, and feedback on individual contributions.',
     role: 'Co-author', external: 'https://openreview.net/forum?id=X20DwkvYeV',
@@ -85,7 +114,7 @@ export const papers: Paper[] = [
   {
     slug: 'norm-dynamics', title: 'Manners Maketh MAN: Multi-Agent Norm Dynamics under Cultural Moral Values',
     short: 'Rules and moral profiles in agent simulations', year: 2026, venue: 'CHI 2026 · PoliSim Workshop',
-    category: 'Multi-agent systems', status: 'Workshop', authors: 'Keeheon Lee, Kunhee Ryu, Minje Kim, and Hogyun Yoo',
+    category: 'Social simulation', status: 'Workshop', authors: 'Keeheon Lee, Kunhee Ryu, Minje Kim, and Hogyun Yoo',
     question: 'How do shared rules interact with different moral profiles?',
     summary: 'A multi-agent sandbox studies how institutional rules and agent composition shape behavior in a shared environment.',
     role: 'Co-author', external: 'https://polisim.net/assets/papers/accepted_papers/Manners_Maketh_MAN_Multi-Agent_Norm_Dynamics_under_Cultural_Moral_Values.pdf',

@@ -2,10 +2,10 @@
 import Layout from '../../layouts/Layout.astro';
 import PaperCard from '../../components/PaperCard.astro';
 import { papers } from '../../data/papers';
-const categories = ['All research', 'Agents & planning', 'Learning & evaluation', 'Multi-agent systems', 'Human–AI interaction', 'Information extraction'];
+const categories = ['All research', 'Social simulation', 'Agents & planning', 'Learning & evaluation', 'Multi-agent systems', 'Human–AI interaction', 'Information extraction'];
 ---
-<Layout title="Research" description="Research by Kunhee Ryu on scientific exploration with LLM agents, generalization, multi-agent evidence synthesis, and human–AI interaction.">
-  <section class="page-head wrap"><span class="eyebrow">Research / 2022—2026</span><h1>Research</h1><p>Papers on language model evaluation, scientific search, multi-agent systems, and how people use AI.</p></section>
+<Layout title="Research" description="Research by Kunhee Ryu on social simulation, language model evaluation, scientific search, and human–AI interaction.">
+  <section class="page-head wrap"><span class="eyebrow">Research / 2022—2026</span><h1>Research</h1><p>Papers on social simulation, language model evaluation, scientific search, and how people use AI.</p></section>
   <section class="research-catalog wrap" aria-label="Research catalog">
     <div class="catalog-tools"><div class="filter-buttons" role="group" aria-label="Filter by research topic">{categories.map((category,index)=><button class="filter-button" data-filter={category} aria-pressed={index===0}>{category}</button>)}</div><label class="search-label"><span class="sr-only">Search research</span><input type="search" id="research-search" placeholder="Search research…" /><span aria-hidden="true">⌕</span></label></div>
     <div class="catalog-count"><span class="eyebrow" id="result-count" aria-live="polite">{papers.length} papers</span><span>Published work & accepted papers</span></div>

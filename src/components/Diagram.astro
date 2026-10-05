@@ -9,6 +9,8 @@ const descriptions: Record<string, string> = {
   profiles: 'Four artificial agents with different illustrative moral priorities interact in a shared space and receive contribution feedback.',
   norms: 'A shared institutional rule is applied to four interacting artificial agents. Their collective behavior is observed.',
   axes: 'A conceptual scientific chart is converted to a pixel grid, where the horizontal and vertical axes are identified.',
+  partners: 'Early waiting targets receive 46.9 percent of later waits. The uniform menu reference is 11.8 percent, and the menu position reference is 45.5 percent, in the principal waiting cohort.',
+  'peer-review': 'Two programming agents exchange initial drafts before revising. Public tests select an answer, and separate hidden tests assess the selected answer.',
 };
 ---
 <div class:list={['diagram', `diagram-${kind}`, { 'is-interactive': interactive }]} data-diagram={kind}>
@@ -58,6 +60,27 @@ const descriptions: Record<string, string> = {
       {[[313,125],[389,125],[313,201],[389,201]].map(([x,y])=><circle cx={x} cy={y} r="11" class="diagram-node" stroke-width="1.8"/>)}
       <rect x="515" y="169" width="8" height="33" rx="1" class="diagram-solid"/><rect x="536" y="143" width="8" height="59" rx="1" class="diagram-solid"/><rect x="557" y="156" width="8" height="46" rx="1" class="diagram-solid"/><path d="M503 130V202H573" class="diagram-secondary" stroke-width="1.5"/>
       <g class="svg-label" text-anchor="middle"><text x="135" y="283">Shared rules</text><text x="351" y="283">Agent society</text><text x="540" y="283">Outcomes</text></g><text x="320" y="330" text-anchor="middle" class="svg-caption">Vary the rules. Observe the interaction.</text>
+    </> : kind === 'partners' ? <>
+      <text x="320" y="44" text-anchor="middle" class="svg-title">Later waits to early targets</text>
+      {[{label:'Observed',value:46.9,y:91},{label:'Uniform',value:11.8,y:163},{label:'Position',value:45.5,y:235}].map((row,i)=><g>
+        <text x="58" y={row.y+20} class="svg-label">{row.label}</text>
+        <rect x="260" y={row.y} width={row.value*5} height="25" fill={i===0?'#30372e':i===1?'#c9cfbf':'#87927b'}/>
+        <text x="582" y={row.y+20} text-anchor="end" class="svg-label">{row.value}%</text>
+      </g>)}
+      <path d="M260 282H510" class="diagram-secondary"/>
+      {[0,25,50].map(n=><g><path d={`M${260+n*5} 282v5`} class="diagram-secondary"/><text x={260+n*5} y="308" text-anchor="middle" class="svg-caption">{n}{n===50?'%':''}</text></g>)}
+      <text x="320" y="348" text-anchor="middle" class="svg-caption">Position closely matches observed choice.</text>
+    </> : kind === 'peer-review' ? <>
+      <text x="320" y="40" text-anchor="middle" class="svg-title">One exchange of initial drafts</text>
+      {[[95,'A'],[415,'B']].map(([x,name])=><g>
+        <rect x={x} y="76" width="130" height="62" rx="4" class="diagram-node" stroke-width="1.5"/>
+        <text x={Number(x)+65} y="113" text-anchor="middle" class="svg-label">Draft {name}</text>
+        <rect x={x} y="214" width="130" height="62" rx="4" class="diagram-node" stroke-width="1.5"/>
+        <text x={Number(x)+65} y="251" text-anchor="middle" class="svg-label">Revise {name}</text>
+        <path d={`M${Number(x)+65} 138V214m-5-9 5 9 5-9`} stroke="currentColor" stroke-width="1.5"/>
+      </g>)}
+      <path d="M195 138L445 214m-7-7 7 7-10 1M445 138L195 214m10 1-10-1 7-7" class="diagram-secondary" stroke-width="1.5" stroke-dasharray="4 5"/>
+      <text x="320" y="328" text-anchor="middle" class="svg-caption">Public selection → Hidden assessment</text>
     </> : <>
       <rect x="63" y="81" width="193" height="181" rx="4" class="diagram-node" stroke-width="1.5"/>
       <path d="M91 106V236H233" stroke="currentColor" stroke-width="2"/><path d="M91 193H233M91 151H233M91 109H233" class="diagram-grid"/>
@@ -68,7 +91,7 @@ const descriptions: Record<string, string> = {
     </>}
   </svg>
   {interactive && <div class="diagram-explanation">
-    {kind === 'paths' ? <><div class="diagram-controls" role="group" aria-label="Explore two illustrative edits"><button data-choice="good" aria-pressed="true">Preserve a path</button><button data-choice="bad" aria-pressed="false">Take the dead end</button></div><p class="diagram-feedback" aria-live="polite">This edit leaves a route to the goal. The state remains recoverable.</p><p class="figure-note">Conceptual illustration of recoverability. This graph is not experimental data.</p></> : kind === 'learning' ? <><div class="diagram-controls" role="group" aria-label="Learning curve layers"><button data-choice="both" aria-pressed="true">See both signals</button><button data-choice="hard" aria-pressed="false">Exact match only</button></div><p class="diagram-feedback" aria-live="polite">A continuous signal can distinguish checkpoints that share an exact-match score.</p><p class="figure-note">Conceptual curves with no numerical scale. Token likelihood is not a universal measure of understanding.</p></> : <p class="figure-note">{kind === 'agents' ? 'Conceptual workflow. Agents verify evidence; a separate module performs statistical pooling.' : kind === 'trust' ? 'Conceptual summary of the verification loop, based on the CHI EA 2026 paper.' : kind === 'axes' ? 'Conceptual illustration of axis detection. The chart and pixels are illustrative.' : 'Conceptual illustration of an artificial-agent simulation. This is not experimental data or a model of human populations.'}</p>}
+    {kind === 'paths' ? <><div class="diagram-controls" role="group" aria-label="Explore two illustrative edits"><button data-choice="good" aria-pressed="true">Preserve a path</button><button data-choice="bad" aria-pressed="false">Take the dead end</button></div><p class="diagram-feedback" aria-live="polite">This edit leaves a route to the goal. The state remains recoverable.</p><p class="figure-note">Conceptual illustration of recoverability. This graph is not experimental data.</p></> : kind === 'learning' ? <><div class="diagram-controls" role="group" aria-label="Learning curve layers"><button data-choice="both" aria-pressed="true">See both signals</button><button data-choice="hard" aria-pressed="false">Exact match only</button></div><p class="diagram-feedback" aria-live="polite">A continuous signal can distinguish checkpoints that share an exact-match score.</p><p class="figure-note">Conceptual curves with no numerical scale. Token likelihood is not a universal measure of understanding.</p></> : <p class="figure-note">{kind === 'partners' ? 'Redrawn from the principal waiting cohort: 54 participant records and 1,192 later waits. The position reference is estimated from other runs. These descriptive shares leave individual preference unresolved.' : kind === 'peer-review' ? 'Conceptual peer-review protocol. Agents exchange initial drafts once; hidden assessment happens after answer selection and is not fed back into generation.' : kind === 'agents' ? 'Conceptual workflow. Agents verify evidence; a separate module performs statistical pooling.' : kind === 'trust' ? 'Conceptual summary of the verification loop, based on the CHI EA 2026 paper.' : kind === 'axes' ? 'Conceptual illustration of axis detection. The chart and pixels are illustrative.' : 'Conceptual illustration of an artificial-agent simulation. This is not experimental data or a model of human populations.'}</p>}
   </div>}
 </div>
 <script>

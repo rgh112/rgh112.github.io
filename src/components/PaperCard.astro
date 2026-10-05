@@ -1,13 +1,15 @@
 ---
 import Diagram from './Diagram.astro';
+import Authors from './Authors.astro';
 import type { Paper } from '../data/papers';
 interface Props { paper: Paper; index?: number; }
 const { paper, index = 0 } = Astro.props;
 ---
 <article class="paper-card" data-category={paper.category} data-search={`${paper.title} ${paper.summary} ${paper.authors} ${paper.venue}`.toLowerCase()}>
   <a class="card-visual" href={`/research/${paper.slug}/`} tabindex="-1" aria-hidden="true"><span class="visual-number">FIG. {String(index + 1).padStart(2, '0')}</span><Diagram kind={paper.diagram} /><span class="visual-arrow">↗</span></a>
-  <div class="paper-meta"><span>{paper.venue}</span><span class:list={['status', { accepted: paper.status === 'Accepted' }]}>{paper.status}</span></div>
+  <div class="paper-meta"><span>{paper.venue}</span><span class:list={['status', { accepted: paper.status === 'Accepted' }]}>{paper.status}</span>{paper.presentation && <span class="status">{paper.presentation}</span>}</div>
   <h3><a href={`/research/${paper.slug}/`}>{paper.short}</a></h3>
+  <p class="paper-authors"><Authors authors={paper.authors}/></p>
   <p>{paper.summary}</p>
   <span class="card-topic">{paper.category}</span>
 </article>
